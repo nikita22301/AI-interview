@@ -1,0 +1,329 @@
+/* ─── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ─── Page ──────────────────────────────────────────────────── */
+.page {
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  background: #050508;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ambient radial glows */
+.page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 85% 8%,  rgba(139,92,246,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 38% 30% at 15% 85%, rgba(109,40,217,0.08) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* subtle dot grid */
+.page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(139,92,246,0.12) 1px, transparent 1px);
+  background-size: 36px 36px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Card ──────────────────────────────────────────────────── */
+.card {
+  position: relative;
+  z-index: 1;
+  background: rgba(10, 10, 18, 0.88);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow:
+    0 0 0 1px rgba(139,92,246,0.1),
+    0 40px 100px rgba(0,0,0,0.75),
+    0 8px 32px  rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  animation: cardIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  overflow: hidden;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* ─── Wave SVG border (top-right) ──────────────────────────── */
+.waveBorder {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 220px;
+  height: 220px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ─── Corner ambient glow ───────────────────────────────────── */
+.cornerGlow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,0.3) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  animation: pulseGlow 3.2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%,100% { opacity: 0.65; transform: scale(1);    }
+  50%      { opacity: 1;    transform: scale(1.15); }
+}
+
+/* wave dot pulse */
+.waveDot {
+  animation: pulseGlow 1.8s ease-in-out infinite;
+}
+
+/* ─── Brand ─────────────────────────────────────────────────── */
+.brandName {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f0eaff;
+  letter-spacing: -0.02em;
+}
+
+.brandAccent {
+  color: #a78bfa;
+}
+
+.brandIcon {
+  box-shadow: 0 0 18px rgba(124,58,237,0.55);
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+}
+
+/* ─── Headings ──────────────────────────────────────────────── */
+.heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #f5f0ff;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+/* ─── Stagger fade-up animations ───────────────────────────── */
+.fadeUp {
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+.delay1 { animation-delay: 0.08s; }
+.delay2 { animation-delay: 0.15s; }
+.delay3 { animation-delay: 0.22s; }
+.delay4 { animation-delay: 0.29s; }
+.delay5 { animation-delay: 0.36s; }
+.delay6 { animation-delay: 0.43s; }
+.delay7 { animation-delay: 0.50s; }
+.delay8 { animation-delay: 0.57s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ─── Field label ───────────────────────────────────────────── */
+.fieldLabel {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(167,139,250,0.65);
+}
+
+/* ─── Sparkle wrapper + input ───────────────────────────────── */
+.sparkleWrapper {
+  position: relative;
+  overflow: visible;
+}
+
+.sparkleDot {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #c4b5fd 0%, #7c3aed 100%);
+  pointer-events: none;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 5px rgba(167,139,250,0.85);
+  transition: opacity 0.1s linear;
+}
+
+.loginInput {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-size: 0.875rem;
+  font-family: 'DM Sans', sans-serif;
+  color: #f0eaff;
+  outline: none;
+  transition:
+    border-color 0.25s ease,
+    background   0.25s ease,
+    box-shadow   0.25s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.loginInput::placeholder {
+  color: rgba(200,185,255,0.22);
+}
+
+.loginInput:hover,
+.loginInput:focus,
+.inputActive {
+  border-color: rgba(139,92,246,0.65) !important;
+  background: rgba(124,58,237,0.09) !important;
+  box-shadow:
+    0 0 0 3px rgba(124,58,237,0.18),
+    0 0 20px rgba(124,58,237,0.12) !important;
+}
+
+/* ─── Sign-in button ────────────────────────────────────────── */
+.btnLogin {
+  width: 100%;
+  padding: 13px 0;
+  border-radius: 11px;
+  border: none;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 55%, #5b21b6 100%);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow:
+    0 4px 24px rgba(124,58,237,0.45),
+    0 1px 4px  rgba(0,0,0,0.3);
+}
+
+.btnLogin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.btnLogin:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 36px rgba(124,58,237,0.6),
+    0 2px 8px   rgba(0,0,0,0.4);
+}
+
+.btnLogin:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btnLogin:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ─── Google button ─────────────────────────────────────────── */
+.btnGoogle {
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 11px;
+  border: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.04);
+  color: rgba(240,234,255,0.75);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.btnGoogle:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.16);
+  transform: translateY(-1px);
+}
+
+/* ─── Divider ───────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+}
+
+.dividerText {
+  font-size: 0.69rem;
+  color: rgba(200,185,255,0.28);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ─── Spinner ───────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Forgot / register links ───────────────────────────────── */
+.forgotLink {
+  font-size: 0.75rem;
+  color: rgba(167,139,250,0.55);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.forgotLink:hover { color: #a78bfa; }
+
+.registerText {
+  font-size: 0.8125rem;
+  color: rgba(200,185,255,0.4);
+  text-align: center;
+}
+
+.registerLink {
+  color: #a78bfa;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.registerLink:hover { color: #c4b5fd; }
