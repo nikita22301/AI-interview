@@ -1,0 +1,362 @@
+/* ChatBot.module.css */
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.botInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.botAvatar {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--accent), var(--pink));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.botName {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.botStatus {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.onlineDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+.onlineText {
+  font-size: 10px;
+  color: var(--green);
+}
+
+.headerControls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.liveTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: pulse 1s infinite;
+}
+
+.select {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: var(--r);
+  cursor: pointer;
+  outline: none;
+  transition: border 0.18s;
+}
+
+.select:focus {
+  border-color: var(--accent);
+}
+
+.clearBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 8px;
+  border-radius: var(--r);
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.clearBtn:hover {
+  background: var(--bg4);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Messages area */
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0 8px;
+  min-height: 200px;
+  max-height: 280px;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text3);
+  text-align: center;
+  padding: 20px;
+}
+
+.emptyIcon {
+  font-size: 28px;
+}
+
+.emptyTitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+.emptyHint {
+  font-size: 12px;
+}
+
+/* Message rows */
+.messageRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  animation: fadeUp 0.3s ease both;
+}
+
+.messageRowUser {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.avatarUser {
+  background: linear-gradient(135deg, var(--accent), var(--pink));
+  color: #fff;
+}
+
+.avatarBot {
+  background: var(--bg4);
+  border: 1px solid var(--border);
+}
+
+.bubble {
+  max-width: 78%;
+  padding: 10px 13px;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.bubbleUser {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 14px 14px 4px 14px;
+}
+
+.bubbleBot {
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 14px 14px 14px 4px;
+}
+
+.scoreTag {
+  font-size: 10px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-weight: 600;
+}
+
+/* Typing indicator */
+.typingIndicator {
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.typingDots {
+  display: flex;
+  gap: 3px;
+  padding: 8px 12px;
+  background: var(--bg3);
+  border-radius: 14px;
+  width: fit-content;
+}
+
+.typingDot {
+  width: 5px;
+  height: 5px;
+  background: var(--text3);
+  border-radius: 50%;
+  animation: pulse 0.8s infinite;
+}
+
+.typingText {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+/* Input area */
+.inputRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  align-items: flex-end;
+}
+
+.chatInput {
+  flex: 1;
+  min-height: 60px;
+  max-height: 120px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border 0.18s;
+  resize: none;
+  line-height: 1.5;
+}
+
+.chatInput:focus {
+  border-color: var(--accent);
+}
+
+.sendBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: var(--r);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.sendBtn:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+}
+
+.sendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Quick action buttons */
+.quickActions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.quickBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--r);
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-weight: 500;
+}
+
+.quickBtn:hover {
+  background: var(--bg4);
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+.quickBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

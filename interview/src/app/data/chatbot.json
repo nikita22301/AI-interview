@@ -1,0 +1,51 @@
+{
+  "interviewer": {
+    "name": "Alex AI",
+    "title": "Senior Interviewer",
+    "avatar": "🤖",
+    "status": "Online · ready to interview"
+  },
+  "categories": [
+    { "value": "dsa", "label": "DSA" },
+    { "value": "system", "label": "System Design" },
+    { "value": "behavioral", "label": "Behavioral" },
+    { "value": "fullstack", "label": "Full Stack" }
+  ],
+  "prompts": {
+    "dsa": [
+      "Welcome back! Let's sharpen those DSA skills. Today I have a medium-hard problem for you.\n\n**Problem:** Given a binary tree, find the maximum path sum. A path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections.\n\n*Example:* `[-10, 9, 20, null, null, 15, 7]` → Output: `42`\n\nTake your time to think about the approach before coding. What's your initial intuition?",
+      "Let's do some DSA practice! I'll ask you about Two Sum variants, tree traversals, or dynamic programming. Which would you prefer to focus on today?",
+      "Ready for a coding challenge? Let's start with: **Merge K Sorted Lists** — a classic linked list problem. What's the most efficient approach you can think of, and what's its time complexity?"
+    ],
+    "system": [
+      "Welcome! Today let's tackle a system design question.\n\n**Design a URL shortener** like bit.ly that needs to handle:\n- 100M URLs per day\n- 10:1 read/write ratio\n- URLs should never expire\n- Analytics for each URL\n\nStart by clarifying requirements, then walk me through your high-level design.",
+      "System design time! Design a **real-time collaborative document editor** (like Google Docs). Focus on consistency, conflict resolution, and scalability. What are your first thoughts?",
+      "Let's design a **notification service** that handles push, email, and SMS for 50M users. Start with the key components and data flow."
+    ],
+    "behavioral": [
+      "Let's practice behavioral questions! I'll use the STAR method as a framework.\n\n**Tell me about a time when you had to lead a project under a very tight deadline.** Walk me through the Situation, Task, Actions you took, and the Results.",
+      "Behavioral round! Here's a classic: **Describe a conflict with a teammate and how you resolved it.** Be specific — I'll probe for details.",
+      "Ready? **Tell me about your most impactful technical contribution** at your current or previous role. What was the scope, your role, and the measurable outcome?"
+    ],
+    "fullstack": [
+      "Full stack time! Let's cover both frontend and backend.\n\n**Build a real-time dashboard** that shows live analytics. What tech stack would you choose and why? Walk me through your architecture decisions from DB to UI.",
+      "Question: You need to optimize a React app that has poor performance — **initial load is 8s, TTI is 12s**. What's your systematic approach to diagnose and fix this? Be specific about tools and techniques.",
+      "Design and implement a **REST API for a blog platform** with auth, pagination, and caching. Walk me through your schema design and key endpoints."
+    ]
+  },
+  "followUps": [
+    "Interesting approach. Can you walk me through the time and space complexity?",
+    "Good start! Now, what are the edge cases you need to handle?",
+    "I see. How would this scale to handle 10x the load?",
+    "That's a solid answer. Let me challenge you — what if the input is null or empty?",
+    "Can you code that up? I'd like to see the implementation.",
+    "Good thinking. How would you test this solution?",
+    "What alternative approaches did you consider, and why did you choose this one?"
+  ],
+  "quickActions": [
+    { "label": "Start interview", "icon": "▶", "prompt": "Start a new interview session" },
+    { "label": "Hint", "icon": "💡", "prompt": "Give me a hint for this problem" },
+    { "label": "Feedback", "icon": "📊", "prompt": "Evaluate my last answer and give detailed feedback" },
+    { "label": "Skip", "icon": "→", "prompt": "Skip this question and give me the next one" }
+  ]
+}

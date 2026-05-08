@@ -1,0 +1,363 @@
+/* PerformanceCard.module.css */
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.headerLeft {}
+
+.sectionLabel {
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Tab buttons */
+.tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: var(--r);
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-weight: 500;
+}
+
+.tab:hover {
+  background: var(--bg4);
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+.tabActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── SKILLS TAB ── */
+
+.skillsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.skillBox {
+  background: var(--bg3);
+  border-radius: var(--r);
+  padding: 12px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.skillScore {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+
+.skillScoreGreen  { color: var(--green); }
+.skillScoreAccent { color: var(--accent2); }
+.skillScoreBlue   { color: var(--blue); }
+.skillScoreAmber  { color: var(--amber); }
+
+.skillName {
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.skillBarTrack {
+  background: var(--bg4);
+  border-radius: 3px;
+  height: 3px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.skillBarFill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.skillBarGreen  { background: var(--green); }
+.skillBarAccent { background: var(--accent); }
+.skillBarBlue   { background: var(--blue); }
+.skillBarAmber  { background: var(--amber); }
+
+.areasRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.areaBox {
+  flex: 1;
+  min-width: 200px;
+  border-radius: var(--r);
+  padding: 12px;
+}
+
+.areaBoxGreen {
+  background: var(--green-bg);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.areaBoxAmber {
+  background: var(--amber-bg);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.areaTitle {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.areaTitleGreen { color: var(--green); }
+.areaTitleAmber { color: var(--amber); }
+
+.areaList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.areaItem {
+  font-size: 12px;
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.dotGreen { background: var(--green); }
+.dotAmber { background: var(--amber); }
+
+/* ── HISTORY TAB ── */
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+}
+
+.historyScore {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+
+.historyScoreGreen  { background: var(--green-bg);  color: var(--green); }
+.historyScoreAccent { background: var(--accent-bg); color: var(--accent2); }
+.historyScoreAmber  { background: var(--amber-bg);  color: var(--amber); }
+.historyScoreRed    { background: var(--red-bg);    color: var(--red); }
+
+.historyInfo {
+  flex: 1;
+}
+
+.historyTitle {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.historyTime {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tagGreen  { background: var(--green-bg);  color: var(--green); }
+.tagAccent { background: var(--accent-bg); color: var(--accent2); }
+.tagAmber  { background: var(--amber-bg);  color: var(--amber); }
+.tagRed    { background: var(--red-bg);    color: var(--red); }
+
+/* ── PROGRESS TAB ── */
+
+.chartWrapper {
+  position: relative;
+  height: 120px;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 20px;
+  gap: 6px;
+}
+
+.chartGridLines {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.chartGridLine {
+  font-size: 9px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chartGridLineRule {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  opacity: 0.5;
+}
+
+.barChart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.barCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.5s ease;
+}
+
+.barDefault { background: rgba(108, 99, 255, 0.35); }
+.barActive  { background: var(--accent); }
+
+.barLabel {
+  font-size: 8px;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+
+.barLabelDefault { color: var(--text3); }
+.barLabelActive  { color: var(--accent2); }
+
+.progressStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.progressStatBox {
+  background: var(--bg3);
+  border-radius: var(--r);
+  padding: 10px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.progressStatValue {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+
+.progressStatValueGreen  { color: var(--green); }
+.progressStatValueBlue   { color: var(--blue); }
+.progressStatValueAccent { color: var(--accent2); }
+
+.progressStatLabel {
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 2px;
+}

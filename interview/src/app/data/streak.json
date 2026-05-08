@@ -1,0 +1,15 @@
+{
+  "currentStreak": 14,
+  "bestStreak": 21,
+  "thisMonth": 19,
+  "weeklyGoal": {
+    "completed": 5,
+    "total": 7
+  },
+  "last21Days": [
+    true, true, true, false, true, true, true,
+    false, true, true, true, true, true, true,
+    false, false, true, true, true, true, true
+  ],
+  "message": "Practice today to keep your streak alive!"
+}

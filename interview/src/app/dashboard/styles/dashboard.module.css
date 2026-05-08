@@ -1,0 +1,52 @@
+/* dashboard.module.css */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 16px;
+  padding: 16px;
+  min-height: 100vh;
+}
+
+/* Left sidebar stacks profile + streak vertically */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  grid-row: 1 / 3;
+}
+
+/* Top right: performance */
+.performanceArea {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Bottom right: chatbot */
+.chatArea {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* Responsive: collapse to single column on smaller screens */
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .sidebar {
+    grid-row: auto;
+  }
+
+  .performanceArea {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .chatArea {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}

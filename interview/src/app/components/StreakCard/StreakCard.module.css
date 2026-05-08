@@ -1,0 +1,190 @@
+/* StreakCard.module.css */
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+}
+
+/* Header row */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.headerLeft {}
+
+.sectionLabel {
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+.streakCount {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.streakNumber {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--amber);
+  line-height: 1;
+  font-family: var(--mono);
+}
+
+.streakUnit {
+  font-size: 14px;
+  color: var(--text2);
+}
+
+.flameEmoji {
+  font-size: 28px;
+  animation: flamePulse 1.5s ease-in-out infinite;
+}
+
+/* Weekly goal */
+.goalBlock {
+  margin-bottom: 14px;
+}
+
+.goalHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.goalLabel {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.goalValue {
+  font-size: 11px;
+  color: var(--green);
+  font-family: var(--mono);
+}
+
+.progressTrack {
+  background: var(--bg4);
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber), var(--green));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Streak grid */
+.streakGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.streakDay {
+  height: 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 500;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.streakDayToday {
+  background: var(--amber);
+  color: #000;
+  border: 1px solid var(--amber);
+}
+
+.streakDayCompleted {
+  background: rgba(245, 158, 11, 0.25);
+  color: var(--amber);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.streakDayMissed {
+  background: var(--bg3);
+  color: var(--text3);
+  border: 1px solid var(--border);
+}
+
+/* Stats row */
+.statsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.statBox {
+  background: var(--bg3);
+  border-radius: var(--r);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+}
+
+.statBoxLabel {
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statBoxValue {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--mono);
+  margin-top: 3px;
+}
+
+.statBoxValueAmber { color: var(--amber); }
+.statBoxValueGreen { color: var(--green); }
+
+/* Reminder banner */
+.reminder {
+  margin-top: 12px;
+  padding: 10px;
+  background: var(--amber-bg);
+  border-radius: var(--r);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reminderIcon {
+  font-size: 14px;
+  color: var(--amber);
+  flex-shrink: 0;
+}
+
+.reminderText {
+  font-size: 11px;
+  color: var(--amber);
+}
