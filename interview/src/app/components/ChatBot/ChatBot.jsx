@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { BsRobot } from "react-icons/bs";
+import { FaTrash } from "react-icons/fa";
+import { IoSend } from "react-icons/io5";
 import styles from './ChatBot.module.css';
 
 function parseMarkdown(text) {
@@ -110,7 +113,7 @@ export default function ChatBot({ chatbot, userInitials = 'RK' }) {
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.botInfo}>
-          <div className={styles.botAvatar}>{interviewer.avatar}</div>
+          <div className={styles.botAvatar}><BsRobot /></div>
           <div>
             <div className={styles.botName}>{interviewer.name} — {interviewer.title}</div>
             <div className={styles.botStatus}>
@@ -136,7 +139,7 @@ export default function ChatBot({ chatbot, userInitials = 'RK' }) {
               <option key={cat.value} value={cat.value}>{cat.label}</option>
             ))}
           </select>
-          <button className={styles.clearBtn} onClick={clearChat} title="Clear chat">🗑</button>
+          <button className={styles.clearBtn} onClick={clearChat} title="Clear chat"><FaTrash /></button>
         </div>
       </div>
 
@@ -144,7 +147,7 @@ export default function ChatBot({ chatbot, userInitials = 'RK' }) {
       <div className={styles.messages}>
         {messages.length === 0 ? (
           <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>🤖</div>
+            <div className={styles.emptyIcon}><BsRobot /></div>
             <div className={styles.emptyTitle}>Alex is ready to interview you</div>
             <div className={styles.emptyHint}>
               Select a category and click <strong style={{ color: 'var(--accent2)' }}>Start interview</strong> or type a message to begin
@@ -209,7 +212,7 @@ export default function ChatBot({ chatbot, userInitials = 'RK' }) {
           disabled={isTyping}
           title="Send"
         >
-          ➤
+          <IoSend />
         </button>
       </div>
 

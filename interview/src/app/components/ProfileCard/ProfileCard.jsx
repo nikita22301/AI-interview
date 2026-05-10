@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './ProfileCard.module.css';
+import { FaEnvelope, FaMapMarkerAlt, FaBriefcase, FaBullseye, FaEdit  } from "react-icons/fa";
 
 const TAG_COLOR_MAP = {
   accent: styles.tagAccent,
@@ -9,12 +10,11 @@ const TAG_COLOR_MAP = {
   amber:  styles.tagAmber,
   pink:   styles.tagPink,
 };
-
 const META_ICONS = {
-  email:      '✉',
-  location:   '📍',
-  experience: '💼',
-  target:     '🎯',
+  email: <FaEnvelope />,
+  location: <FaMapMarkerAlt />,
+  experience: <FaBriefcase />,
+  target: <FaBullseye />,
 };
 
 export default function ProfileCard({ user }) {
@@ -98,7 +98,7 @@ export default function ProfileCard({ user }) {
 
         {/* Edit button */}
         <button className={styles.editBtn}>
-          ✏ Edit profile ↗
+          <FaEdit /> Edit profile ↗
         </button>
       </div>
     </div>
