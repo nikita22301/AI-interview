@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import styles from "../../public/loginpage.module.css"
-
+import { FaBolt } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 // ─── Types ────────────────────────────────────────────────────
 interface Sparkle {
   id: number;
@@ -164,11 +165,12 @@ export default function LoginPage() {
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading]   = useState(false);
-
+  const router = useRouter();
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
     setLoading(true);
     // TODO: call your auth API here
+    router.push("/dashboard");
     setTimeout(() => setLoading(false), 2000);
   };
 
@@ -181,9 +183,11 @@ export default function LoginPage() {
 
         {/* Brand */}
         <div className={`${styles.fadeUp1} mb-9 flex items-center gap-2.5`}>
-          <div className={`${styles.brandIcon} flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] text-lg`}>
-            ⚡
-          </div>
+         <div
+  className={`${styles.brandIcon} flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] text-lg`}
+>
+  <FaBolt size={16} />
+</div>
           <span className={`${styles.brandName} text-[18px] font-bold text-[#f0eaff]`}>
             Prep<span className="text-violet-400">IQ</span>
           </span>

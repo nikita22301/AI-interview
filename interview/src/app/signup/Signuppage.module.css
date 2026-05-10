@@ -1,46 +1,60 @@
-/* ── Fonts ──────────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
-/* ── Page background layers ─────────────────────────────────── */
+/* ── Page ── */
 .page {
   font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  background: #050508;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  position: relative;
 }
 
 .page::before {
   content: '';
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(109, 40, 217, 0.07) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(139,92,246,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(109,40,217,0.07) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
 }
 
 .page::after {
   content: '';
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background-image:
-    linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(139,92,246,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.04) 1px, transparent 1px);
   background-size: 48px 48px;
-  pointer-events: none;
-  z-index: 0;
+  pointer-events: none; z-index: 0;
 }
 
-/* ── Card ───────────────────────────────────────────────────── */
+/* ── Card ── */
 .card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 460px;
+  border-radius: 20px;
+  padding: 44px;
+  overflow: hidden;
   background: rgba(10, 10, 16, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255,255,255,0.07);
   box-shadow:
-    0 0 0 1px rgba(139, 92, 246, 0.08),
-    0 32px 80px rgba(0, 0, 0, 0.7),
-    0 8px 32px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 0 0 1px rgba(139,92,246,0.08),
+    0 32px 80px rgba(0,0,0,0.7),
+    0 8px 32px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.06);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.successCard {
+  max-width: 420px;
+  text-align: center;
+  padding: 48px;
 }
 
 @keyframes cardIn {
@@ -48,28 +62,12 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ── Wave SVG border ────────────────────────────────────────── */
-.waveBorder {
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  width: 220px;
-  height: 220px;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* ── Corner glow ────────────────────────────────────────────── */
+/* ── Corner glow ── */
 .cornerGlow {
-  position: absolute;
-  top: -30px;
-  right: -30px;
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(167, 139, 250, 0.35) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 1;
+  position: absolute; top: -30px; right: -30px;
+  width: 140px; height: 140px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,0.35) 0%, transparent 70%);
+  pointer-events: none; z-index: 1;
   animation: pulseGlow 3s ease-in-out infinite;
 }
 
@@ -78,31 +76,71 @@
   50%       { opacity: 1;   transform: scale(1.12); }
 }
 
-/* ── Brand ──────────────────────────────────────────────────── */
+/* ── Wave border ── */
+.waveBorder {
+  position: absolute; top: -1px; right: -1px;
+  width: 220px; height: 220px;
+  pointer-events: none; z-index: 2;
+}
+
+.waveDot { animation: pulseGlow 1.8s ease-in-out infinite; }
+
+/* ── Brand ── */
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .brandIcon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
   background: linear-gradient(135deg, #7c3aed, #a78bfa);
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+  box-shadow: 0 0 20px rgba(124,58,237,0.5);
 }
 
 .brandName {
   font-family: 'Syne', sans-serif;
-  letter-spacing: -0.02em;
+  font-size: 18px; font-weight: 700;
+  letter-spacing: -0.02em; color: #f0eaff;
 }
 
-/* ── Step Indicator ─────────────────────────────────────────── */
+.brandAccent { color: #a78bfa; }
+
+/* ── Step Indicator ── */
+.stepIndicator {
+  display: flex; align-items: center;
+  margin-bottom: 28px;
+}
+
+.stepItem {
+  display: flex; align-items: center; gap: 6px;
+  flex: 1;
+}
+
+.stepItem:last-child { flex: none; }
+
 .stepDot {
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(200, 185, 255, 0.35);
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; font-family: 'Syne', sans-serif;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: rgba(200,185,255,0.35);
   transition: border-color 0.3s, background 0.3s, color 0.3s, box-shadow 0.3s;
-  font-family: 'Syne', sans-serif;
 }
 
 .stepDotActive {
   border-color: #a78bfa;
-  background: rgba(124, 58, 237, 0.2);
+  background: rgba(124,58,237,0.2);
   color: #a78bfa;
-  box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 0 12px rgba(124,58,237,0.4);
 }
 
 .stepDotDone {
@@ -111,207 +149,32 @@
   color: #fff;
 }
 
+.stepLabel {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.05em;
+  color: rgba(200,185,255,0.3);
+  display: none;
+}
+
+@media (min-width: 480px) { .stepLabel { display: inline; } }
+
+.stepLabelActive { color: rgba(196,181,253,0.8); }
+
 .stepLine {
-  background: rgba(255, 255, 255, 0.08);
+  height: 1px; flex: 1; margin: 0 6px;
+  background: rgba(255,255,255,0.08);
   transition: background 0.4s;
 }
 
-.stepLineDone {
-  background: rgba(124, 58, 237, 0.5);
-}
+.stepLineDone { background: rgba(124,58,237,0.5); }
 
-/* ── Fade-up animation ──────────────────────────────────────── */
-.fadeUp {
-  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Step slide-in ──────────────────────────────────────────── */
-.stepContent {
-  animation: stepIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  padding: 0 4px;               /* <-- subtle horizontal breathing room */
-}
-
-@keyframes stepIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-/* ── Heading ────────────────────────────────────────────────── */
-.heading {
-  font-family: 'Syne', sans-serif;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  color: #f5f0ff;
-}
-
-/* ── Sparkle wrapper ────────────────────────────────────────── */
-.sparkleWrapper {
-  position: relative;
-  overflow: visible;
-}
-
-.sparkleDot {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle, #c4b5fd, #7c3aed);
-  pointer-events: none;
-  z-index: 10;
-  box-shadow: 0 0 4px rgba(167, 139, 250, 0.8);
-  transform: translate(-50%, -50%);
-  transition: opacity 0.1s;
-}
-
-/* ── Input base ─────────────────────────────────────────────── */
-.input {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  color: #f0eaff;
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  position: relative;
-  z-index: 1;
-  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
-}
-
-.input::placeholder {
-  color: rgba(200, 185, 255, 0.25);
-}
-
-.inputActive,
-.input:hover,
-.input:focus {
-  border-color: rgba(139, 92, 246, 0.6) !important;
-  background: rgba(124, 58, 237, 0.08) !important;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15), 0 0 20px rgba(124, 58, 237, 0.1) !important;
-}
-
-.inputError {
-  border-color: rgba(248, 113, 113, 0.5) !important;
-  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.1) !important;
-}
-
-/* ── Field label ────────────────────────────────────────────── */
-.fieldLabel {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(167, 139, 250, 0.7);
-}
-
-/* ── Form field wrapper ─────────────────────────────────────── */
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding: 2px 0;
-}
-
-/* ── Form fields stack ──────────────────────────────────────── */
-.fieldsStack {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 4px;
-  margin-bottom: 4px;
-}
-
-/* ── OTP boxes ──────────────────────────────────────────────── */
-.otpBox {
-  aspect-ratio: 1;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  font-family: 'Syne', sans-serif;
-  color: #f0eaff;
-  caret-color: #a78bfa;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s;
-}
-
-.otpBox:focus {
-  border-color: rgba(139, 92, 246, 0.7);
-  background: rgba(124, 58, 237, 0.1);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2), 0 0 16px rgba(124, 58, 237, 0.15);
-  transform: scale(1.06);
-}
-
-.otpFilled {
-  border-color: rgba(167, 139, 250, 0.5);
-  background: rgba(124, 58, 237, 0.08);
-  color: #c4b5fd;
-}
-
-/* ── Primary button ─────────────────────────────────────────── */
-.btnPrimary {
-  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
-  font-family: 'Syne', sans-serif;
-  box-shadow: 0 4px 24px rgba(124, 58, 237, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btnPrimary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.btnPrimary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-
-.btnPrimary:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.btnPrimary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* ── Spinner ────────────────────────────────────────────────── */
-.spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  vertical-align: middle;
-  margin-right: 8px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ── Password strength bar ──────────────────────────────────── */
-.strengthSeg {
-  flex: 1;
-  height: 3px;
-  border-radius: 999px;
-  transition: background 0.3s ease;
-}
-
-/* ── Success icon ───────────────────────────────────────────── */
+/* ── Success screen ── */
 .successIcon {
-  background: rgba(124, 58, 237, 0.12);
-  border: 1px solid rgba(167, 139, 250, 0.25);
-  box-shadow: 0 0 32px rgba(124, 58, 237, 0.25);
-  animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(167,139,250,0.25);
+  box-shadow: 0 0 32px rgba(124,58,237,0.25);
+  animation: popIn 0.5s cubic-bezier(0.16,1,0.3,1) both;
 }
 
 @keyframes popIn {
@@ -319,12 +182,34 @@
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* ── Wave dot pulse ─────────────────────────────────────────── */
-.waveDot {
-  animation: pulseGlow 1.8s ease-in-out infinite;
+.successHeading {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px; font-weight: 800;
+  letter-spacing: -0.02em; color: #f5f0ff;
+  margin-bottom: 10px;
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
+.successSub {
+  font-size: 14px; font-weight: 300;
+  color: rgba(200,185,255,0.5);
+  margin-bottom: 32px;
+}
+
+.successBtn {
+  display: block; border-radius: 11px; padding: 14px 0;
+  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+  letter-spacing: 0.03em; color: #fff; text-decoration: none;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
+  box-shadow: 0 4px 24px rgba(124,58,237,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.successBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(124,58,237,0.55);
+}
+
 @media (max-width: 520px) {
+  .card { padding: 32px 24px; }
   .waveBorder { width: 160px; height: 160px; }
 }

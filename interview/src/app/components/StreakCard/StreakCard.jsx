@@ -18,7 +18,7 @@ export default function StreakCard({ streak }) {
             <span className={styles.streakUnit}>days</span>
           </div>
         </div>
-        <div className={styles.flameEmoji}>🔥</div>
+        <div className={styles.flameEmoji}></div>
       </div>
 
       {/* Weekly goal */}
