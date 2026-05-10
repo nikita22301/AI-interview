@@ -2,8 +2,8 @@
 
 import { useState, useRef } from "react";
 import styles from "./style/Passwordstep.module.css"
-import { useSparkles, validatePass, validateConf } from "../../utils/singup"
-
+import { useSparkles, validatePass, validateConf } from "../../../utils/singup"
+import { AuthMode } from "../../../utils/singup";
 interface Props {
   password: string; setPassword: (v: string) => void;
   confirm: string;  setConfirm:  (v: string) => void;
@@ -11,6 +11,7 @@ interface Props {
   setErr: (e: { password: string; confirm: string }) => void;
   loading: boolean;
   onSubmit: () => void;
+  mode:AuthMode
 }
 
 function SparkleInput({ type, placeholder, value, onChange, id, error }: {

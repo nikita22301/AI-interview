@@ -1,0 +1,29 @@
+/* ── Fade-up ────────────────────────────────────────────────── */
+.fadeUp {
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.fadeUp1 { animation: fadeUp 0.5s 0.10s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fadeUp2 { animation: fadeUp 0.5s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fadeUp3 { animation: fadeUp 0.5s 0.20s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fadeUp4 { animation: fadeUp 0.5s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fadeUp5 { animation: fadeUp 0.5s 0.30s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fadeUp6 { animation: fadeUp 0.5s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fadeUp7 { animation: fadeUp 0.5s 0.40s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fadeUp8 { animation: fadeUp 0.5s 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fadeUp9 { animation: fadeUp 0.5s 0.50s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Brand ──────────────────────────────────────────────────── */
+.brandIcon {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+}
+
+.brandName {
+  font-family: 'Syne', sans-serif;
+  letter-spacing: -0.02em;
+}
