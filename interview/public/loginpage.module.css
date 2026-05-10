@@ -95,17 +95,6 @@
   animation: pulseGlow 1.8s ease-in-out infinite;
 }
 
-/* ── Brand ──────────────────────────────────────────────────── */
-.brandIcon {
-  background: linear-gradient(135deg, #7c3aed, #a78bfa);
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
-}
-
-.brandName {
-  font-family: 'Syne', sans-serif;
-  letter-spacing: -0.02em;
-}
-
 /* ── Fade-up ────────────────────────────────────────────────── */
 .fadeUp {
   animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;

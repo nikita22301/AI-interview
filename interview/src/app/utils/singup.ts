@@ -12,6 +12,9 @@ export interface Sparkle {
 
 export type Step = "info" | "otp" | "password";
 
+export type AuthMode =
+  | "signup"
+  | "forgot-password";
 // ─── Validation ───────────────────────────────────────────────
 export const validateName  = (v: string) => !v.trim() ? "Name is required" : v.trim().length < 2 ? "At least 2 characters" : "";
 export const validateEmail = (v: string) => !v.trim() ? "Email is required" : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? "Enter a valid email" : "";

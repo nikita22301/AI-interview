@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import styles from "../../public/loginpage.module.css"
 import { FaBolt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import Logo from "./components/CommonUI/logo"
+import Loading from "./components/CommonUI/loading";
 // ─── Types ────────────────────────────────────────────────────
 interface Sparkle {
   id: number;
@@ -174,6 +176,9 @@ export default function LoginPage() {
     setTimeout(() => setLoading(false), 2000);
   };
 
+  // if(!loading){
+  //   return <Loading/>
+  // }
   return (
     <div className={styles.page}>
       {/* Card */}
@@ -182,16 +187,7 @@ export default function LoginPage() {
         <WaveBorder />
 
         {/* Brand */}
-        <div className={`${styles.fadeUp1} mb-9 flex items-center gap-2.5`}>
-         <div
-  className={`${styles.brandIcon} flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] text-lg`}
->
-  <FaBolt size={16} />
-</div>
-          <span className={`${styles.brandName} text-[18px] font-bold text-[#f0eaff]`}>
-            Prep<span className="text-violet-400">IQ</span>
-          </span>
-        </div>
+        <Logo/>
 
         {/* Heading */}
         <h1 className={`${styles.fadeUp2} mb-2 font-['Syne'] text-[28px] font-extrabold leading-tight tracking-tight text-[#f5f0ff]`}>

@@ -2,7 +2,8 @@
 
 import { useState, useRef } from "react";
 import styles from "./style/Nameemailstep.module.css"
-import { useSparkles, validateName, validateEmail} from "../../utils/singup"
+import { useSparkles, validateName, validateEmail} from "../../../utils/singup"
+import { AuthMode } from "../../../utils/singup";
 
 interface Props {
   name: string; setName: (v: string) => void;
@@ -11,6 +12,7 @@ interface Props {
   setErr: (e: { name: string; email: string }) => void;
   loading: boolean;
   onSubmit: () => void;
+  mode:AuthMode
 }
 
 function SparkleInput({ type, placeholder, value, onChange, id, error }: {
@@ -41,10 +43,14 @@ function SparkleInput({ type, placeholder, value, onChange, id, error }: {
   );
 }
 
-export default function NameEmailStep({ name, setName, email, setEmail, err, setErr, loading, onSubmit }: Props) {
+export default function NameEmailStep({ name, setName, email, setEmail, err, setErr, loading, onSubmit,mode }: Props) {
   return (
     <div className={styles.stepContent}>
-      <h1 className={styles.heading}>Create account</h1>
+      <h1 className={styles.heading}>
+        {mode === "signup"
+  ? "Create Account"
+  : "Reset Password"}
+      </h1>
       <p className={styles.subheading}>Start your interview prep journey</p>
 
       <div className={styles.fieldsStack}>
