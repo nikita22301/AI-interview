@@ -133,7 +133,7 @@ export default function SignupPage() {
         </div>
         <h2 className={styles.successHeading}>You're all set!</h2>
         <p className={styles.successSub}>Your account has been created. Welcome to PrepIQ.</p>
-        <a href="/login" className={styles.successBtn}>Go to Sign In</a>
+        <a href="/" className={styles.successBtn}>Go to Sign In</a>
       </div>
     </div>
   );

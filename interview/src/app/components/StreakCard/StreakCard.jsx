@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './StreakCard.module.css';
+import { FaFire, FaCheck , FaClock  } from "react-icons/fa";
 
 export default function StreakCard({ streak }) {
   const { currentStreak, bestStreak, thisMonth, weeklyGoal, last21Days, message } = streak;
@@ -18,7 +19,7 @@ export default function StreakCard({ streak }) {
             <span className={styles.streakUnit}>days</span>
           </div>
         </div>
-        <div className={styles.flameEmoji}></div>
+        <div className={styles.flameEmoji}> <FaFire /></div>
       </div>
 
       {/* Weekly goal */}
@@ -56,17 +57,19 @@ export default function StreakCard({ streak }) {
       <div className={styles.statsRow}>
         <div className={styles.statBox}>
           <div className={styles.statBoxLabel}>Best streak</div>
-          <div className={`${styles.statBoxValue} ${styles.statBoxValueAmber}`}>{bestStreak} 🔥</div>
+          <div className={`${styles.statBoxValue} ${styles.statBoxValueAmber}`}>{bestStreak} <FaFire /></div>
+            {/* 🔥 */}
         </div>
         <div className={styles.statBox}>
           <div className={styles.statBoxLabel}>This month</div>
-          <div className={`${styles.statBoxValue} ${styles.statBoxValueGreen}`}>{thisMonth} ✓</div>
+          <div className={`${styles.statBoxValue} ${styles.statBoxValueGreen}`}>{thisMonth} <FaCheck /></div>
         </div>
       </div>
 
       {/* Reminder */}
       <div className={styles.reminder}>
-        <span className={styles.reminderIcon}>⏰</span>
+        <span className={styles.reminderIcon}><FaClock /></span>
+          {/* ⏰ */}
         <span className={styles.reminderText}>{message}</span>
       </div>
     </div>

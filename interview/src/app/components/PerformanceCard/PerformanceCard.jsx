@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { FaChartLine } from "react-icons/fa";
 import styles from './PerformanceCard.module.css';
 
 const SKILL_COLOR = {
@@ -75,7 +76,7 @@ export default function PerformanceCard({ performance }) {
           <div className={styles.areasRow}>
             <div className={`${styles.areaBox} ${styles.areaBoxGreen}`}>
               <div className={`${styles.areaTitle} ${styles.areaTitleGreen}`}>
-                📈 Strong areas
+                <FaChartLine /> Strong areas
               </div>
               <div className={styles.areaList}>
                 {strongAreas.map((item) => (
