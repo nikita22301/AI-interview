@@ -1,0 +1,180 @@
+.stepContent {
+  animation: stepIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  padding: 0 4px;
+}
+
+@keyframes stepIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #f5f0ff;
+  margin-bottom: 6px;
+}
+
+.subheading {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(200, 185, 255, 0.5);
+  margin-bottom: 28px;
+}
+
+.emailHighlight {
+  font-weight: 500;
+  color: #a78bfa;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(167, 139, 250, 0.7);
+}
+
+/* ── OTP Grid ── */
+.otpGrid {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.otpBox {
+  width: 44px;
+  height: 48px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  color: #f0eaff;
+  caret-color: #a78bfa;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.otpBox:focus {
+  border-color: rgba(139, 92, 246, 0.7);
+  background: rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2), 0 0 16px rgba(124, 58, 237, 0.15);
+  transform: scale(1.06);
+}
+
+.otpFilled {
+  border-color: rgba(167, 139, 250, 0.5);
+  background: rgba(124, 58, 237, 0.08);
+  color: #c4b5fd;
+}
+
+.errorMsg {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #f87171;
+}
+
+/* ── Button ── */
+.btn {
+  margin-top: 28px;
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  border-radius: 11px;
+  padding: 14px 0;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
+  box-shadow: 0 4px 24px rgba(124, 58, 237, 0.4), 0 1px 4px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.55);
+}
+
+.btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Resend row ── */
+.resendRow {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.resendText { color: rgba(200, 185, 255, 0.4); }
+
+.resendBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+  color: #a78bfa;
+  transition: color 0.2s;
+}
+
+.resendBtn:hover { color: #c4b5fd; }
+
+.timer { color: rgba(167, 139, 250, 0.45); font-variant-numeric: tabular-nums; }
+
+.backBtn {
+  margin-top: 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  font-size: 13px;
+  color: rgba(167, 139, 250, 0.5);
+  transition: color 0.2s;
+}
+
+.backBtn:hover { color: #a78bfa; }
