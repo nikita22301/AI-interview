@@ -6,12 +6,12 @@ import { useSparkles, validatePass, validateConf } from "../../../utils/singup"
 import { AuthMode } from "../../../utils/singup";
 interface Props {
   password: string; setPassword: (v: string) => void;
-  confirm: string;  setConfirm:  (v: string) => void;
+  confirm: string; setConfirm: (v: string) => void;
   err: { password: string; confirm: string };
   setErr: (e: { password: string; confirm: string }) => void;
   loading: boolean;
   onSubmit: () => void;
-  mode:AuthMode
+  mode: AuthMode
 }
 
 function SparkleInput({ type, placeholder, value, onChange, id, error }: {
@@ -59,9 +59,9 @@ function EyeIcon({ open }: { open: boolean }) {
 function PasswordStrength({ password }: { password: string }) {
   const checks = [
     { label: "8+ characters", ok: password.length >= 8 },
-    { label: "Uppercase",     ok: /[A-Z]/.test(password) },
-    { label: "Number",        ok: /[0-9]/.test(password) },
-    { label: "Special char",  ok: /[^A-Za-z0-9]/.test(password) },
+    { label: "Uppercase", ok: /[A-Z]/.test(password) },
+    { label: "Number", ok: /[0-9]/.test(password) },
+    { label: "Special char", ok: /[^A-Za-z0-9]/.test(password) },
   ];
   const score = checks.filter((c) => c.ok).length;
   const color = score <= 1 ? "#ef4444" : score === 2 ? "#f97316" : score === 3 ? "#eab308" : "#22c55e";
@@ -87,7 +87,7 @@ function PasswordStrength({ password }: { password: string }) {
   );
 }
 
-export default function PasswordStep({ password, setPassword, confirm, setConfirm, err, setErr, loading, onSubmit }: Props) {
+export default function PasswordStep({ password, setPassword, confirm, setConfirm, err, setErr, loading, onSubmit, mode }: Props) {
   const [showPass, setShowPass] = useState(false);
   const [showConf, setShowConf] = useState(false);
 
@@ -124,11 +124,15 @@ export default function PasswordStep({ password, setPassword, confirm, setConfir
           </div>
         </div>
       </div>
-
-      <button onClick={onSubmit} disabled={loading} className={styles.btn}>
-        {loading && <span className={styles.spinner} />}
-        {loading ? "Creating account…" : "Create Account 🎉"}
-      </button>
+       {mode === "signup"?
+        <button onClick={onSubmit} disabled={loading} className={styles.btn}>
+          {loading && <span className={styles.spinner} />}
+          {loading ? "Creating account…" : "Create Account 🎉"}
+        </button> :
+        <button onClick={onSubmit} disabled={loading} className={styles.btn}>
+          {loading && <span className={styles.spinner} />}
+          {loading ? "Setting password…" : "Set Password 🎉"}
+        </button>}
     </div>
   );
 }

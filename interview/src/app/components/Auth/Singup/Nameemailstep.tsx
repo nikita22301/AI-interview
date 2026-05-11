@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import styles from "./style/Nameemailstep.module.css"
-import { useSparkles, validateName, validateEmail} from "../../../utils/singup"
+import { useSparkles, validateName, validateEmail } from "../../../utils/singup"
 import { AuthMode } from "../../../utils/singup";
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
   setErr: (e: { name: string; email: string }) => void;
   loading: boolean;
   onSubmit: () => void;
-  mode:AuthMode
+  mode: AuthMode
 }
 
 function SparkleInput({ type, placeholder, value, onChange, id, error }: {
@@ -43,23 +43,24 @@ function SparkleInput({ type, placeholder, value, onChange, id, error }: {
   );
 }
 
-export default function NameEmailStep({ name, setName, email, setEmail, err, setErr, loading, onSubmit,mode }: Props) {
+export default function NameEmailStep({ name, setName, email, setEmail, err, setErr, loading, onSubmit, mode }: Props) {
   return (
     <div className={styles.stepContent}>
       <h1 className={styles.heading}>
         {mode === "signup"
-  ? "Create Account"
-  : "Reset Password"}
+          ? "Create Account"
+          : "Reset Password"}
       </h1>
       <p className={styles.subheading}>Start your interview prep journey</p>
 
       <div className={styles.fieldsStack}>
-        <div className={styles.field}>
-          <label htmlFor="name" className={styles.label}>Full name</label>
-          <SparkleInput id="name" type="text" placeholder="Ada Lovelace" value={name}
-            onChange={(v) => { setName(v); if (err.name) setErr({ ...err, name: validateName(v) }); }}
-            error={err.name} />
-        </div>
+        {mode === "signup" && (
+          <div className={styles.field}>
+            <label htmlFor="name" className={styles.label}>Full name</label>
+            <SparkleInput id="name" type="text" placeholder="Ada Lovelace" value={name}
+              onChange={(v) => { setName(v); if (err.name) setErr({ ...err, name: validateName(v) }); }}
+              error={err.name} />
+          </div>)}
         <div className={styles.field}>
           <label htmlFor="email-su" className={styles.label}>Email address</label>
           <SparkleInput id="email-su" type="email" placeholder="you@example.com" value={email}
@@ -72,11 +73,14 @@ export default function NameEmailStep({ name, setName, email, setEmail, err, set
         {loading && <span className={styles.spinner} />}
         {loading ? "Sending OTP…" : "Continue →"}
       </button>
-
-      <p className={styles.footer}>
-        Already have an account?{" "}
-        <a href="/" className={styles.link}>Sign in</a>
-      </p>
+      {mode === "signup" ?
+        <p className={styles.footer}>
+          Already have an account?{" "}
+          <a href="/" className={styles.link}>Sign in</a>
+        </p> : <p className={styles.footer}>
+          Don't have an account?{" "}
+          <a href="/" className={styles.link}> Create one free</a>
+        </p>}
     </div>
   );
 }

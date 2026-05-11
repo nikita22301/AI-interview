@@ -6,6 +6,7 @@ import { FaBolt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Logo from "./components/CommonUI/logo"
 import Loading from "./components/CommonUI/loading";
+import Link from "next/link";
 // ─── Types ────────────────────────────────────────────────────
 interface Sparkle {
   id: number;
@@ -211,9 +212,9 @@ export default function LoginPage() {
 
         {/* Forgot */}
         <div className={`${styles.fadeUp5} mb-7 text-right`}>
-          <a href="#" className="text-[12px] text-violet-400/60 no-underline transition-colors hover:text-violet-400">
+          <Link href="/forgotPassword" className="text-[12px] text-violet-400/60 no-underline transition-colors hover:text-violet-400">
             Forgot password?
-          </a>
+          </Link>
         </div>
 
         {/* Sign in button */}
