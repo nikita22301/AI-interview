@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./shared.module.css";
-import { Spinner } from "./Spinner";
+import Spinner from "../Spinner"
 
 // ─── Google Icon ──────────────────────────────────────────────
 function GoogleIcon() {
