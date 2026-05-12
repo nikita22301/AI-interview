@@ -1,11 +1,17 @@
+// app/onboarding/page.tsx
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./onBoarding.module.css";
-import Logo from "../components/CommonUI/logo"
+import { AuthCard } from "../components/CommonUI/FormDesign/Authcard";
+import { SparkleInput} from "../components/CommonUI/FormDesign/SparkleInput";
+import { SparkleTextarea } from "../components/CommonUI/FormDesign/SparkleTextarea";
+import { PrimaryButton } from "../components/CommonUI/FormDesign/Buttons";
+import { BackButton } from "../components/CommonUI/FormDesign/Buttons";
+import { PillGroup } from "../components/CommonUI/FormDesign/PillGroup";
+import Logo from "../components/CommonUI/logo";
 
-// ─── Constants ────────────────────────────────────────────────
+// Constants
 const DOMAINS = [
   "Frontend",
   "Backend",
@@ -66,746 +72,237 @@ const PREP_TIMELINES = [
 
 const TOTAL_STEPS = 4;
 
-// ─── Types ────────────────────────────────────────────────────
-interface Sparkle {
-  id: number;
-  x: number;
-  y: number;
-  size: number;
-  opacity: number;
-  vx: number;
-  vy: number;
-  life: number;
-}
-
 interface OnboardingData {
-  // Step 1 — Basic
   name: string;
   location: string;
   company: string;
   portfolioUrl: string;
-  // Step 2 — Role
   targetRole: string;
   experience: string;
   domain: string;
   dreamCompanies: string;
-  // Step 3 — Skills
   skills: string[];
   customSkills: string;
-  // Step 4 — Goals
   interviewTypes: string[];
   prepTimeline: string;
   extraContext: string;
 }
 
-// ─── Sparkle Hook ─────────────────────────────────────────────
-function useSparkles(
-  active: boolean,
-  containerRef: React.RefObject<HTMLDivElement | null>
-) {
-  const [sparkles, setSparkles] = useState<Sparkle[]>([]);
-  const animRef = useRef<number | null>(null);
-  const idRef = useRef(0);
+const STEP_META = [
+  { label: "Step 1 of 4", title: "Tell us about yourself", sub: "Help us personalise your interview prep experience" },
+  { label: "Step 2 of 4", title: "Your role & experience", sub: "We'll tailor questions to your level and domain" },
+  { label: "Step 3 of 4", title: "Your skills", sub: "Pick the areas you want to be tested on" },
+  { label: "Step 4 of 4", title: "Your goals", sub: "What are you preparing for?" },
+];
 
-  useEffect(() => {
-    if (!active) {
-      setSparkles([]);
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-      return;
-    }
-
-    let lastSpawn = 0;
-    const loop = (time: number) => {
-      if (time - lastSpawn > 80) {
-        lastSpawn = time;
-        const el = containerRef.current;
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          setSparkles((prev) => [
-            ...prev.slice(-18),
-            {
-              id: idRef.current++,
-              x: Math.random() * rect.width,
-              y: Math.random() * rect.height,
-              size: Math.random() * 6 + 3,
-              opacity: 1,
-              vx: (Math.random() - 0.5) * 1.5,
-              vy: -(Math.random() * 1.5 + 0.5),
-              life: 1,
-            },
-          ]);
-        }
-      }
-      setSparkles((prev) =>
-        prev
-          .map((s) => ({
-            ...s,
-            x: s.x + s.vx,
-            y: s.y + s.vy,
-            life: s.life - 0.035,
-            opacity: s.life - 0.035,
-          }))
-          .filter((s) => s.life > 0)
-      );
-      animRef.current = requestAnimationFrame(loop);
-    };
-
-    animRef.current = requestAnimationFrame(loop);
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-    };
-  }, [active, containerRef]);
-
-  return sparkles;
-}
-
-// ─── Sparkle Input ────────────────────────────────────────────
-function SparkleInput({
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-  id,
-}: {
-  type?: string;
-  placeholder: string;
-  value: string;
-  onChange: (v: string) => void;
-  id: string;
-}) {
-  const [active, setActive] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const sparkles = useSparkles(active, containerRef);
-
+// Step Components
+function StepBasic({ data, onChange, onNext }: { data: OnboardingData; onChange: (patch: Partial<OnboardingData>) => void; onNext: () => void }) {
   return (
-    <div
-      ref={containerRef}
-      className={styles.sparkleWrapper}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => {
-        if (document.activeElement?.id !== id) setActive(false);
-      }}
-    >
-      {sparkles.map((s) => (
-        <span
-          key={s.id}
-          className={styles.sparkleDot}
-          style={{
-            left: s.x,
-            top: s.y,
-            width: s.size,
-            height: s.size,
-            opacity: s.opacity,
-          }}
-        />
-      ))}
-      <input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setActive(true)}
-        onBlur={() => setActive(false)}
-        autoComplete="off"
-        className={[
-          styles.input,
-          "rounded-[10px] px-4 py-[13px] text-sm",
-          active ? styles.inputActive : "",
-        ].join(" ")}
-      />
-    </div>
-  );
-}
-
-// ─── Sparkle Textarea ─────────────────────────────────────────
-function SparkleTextarea({
-  placeholder,
-  value,
-  onChange,
-  id,
-}: {
-  placeholder: string;
-  value: string;
-  onChange: (v: string) => void;
-  id: string;
-}) {
-  const [active, setActive] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const sparkles = useSparkles(active, containerRef);
-
-  return (
-    <div
-      ref={containerRef}
-      className={styles.sparkleWrapper}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => {
-        if (document.activeElement?.id !== id) setActive(false);
-      }}
-    >
-      {sparkles.map((s) => (
-        <span
-          key={s.id}
-          className={styles.sparkleDot}
-          style={{
-            left: s.x,
-            top: s.y,
-            width: s.size,
-            height: s.size,
-            opacity: s.opacity,
-          }}
-        />
-      ))}
-      <textarea
-        id={id}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setActive(true)}
-        onBlur={() => setActive(false)}
-        rows={3}
-        className={[
-          styles.textarea,
-          "rounded-[10px] px-4 py-[13px] text-sm resize-none",
-          active ? styles.inputActive : "",
-        ].join(" ")}
-      />
-    </div>
-  );
-}
-
-// ─── Wave SVG ─────────────────────────────────────────────────
-function WaveBorder() {
-  const dots = [
-    { cx: 200, cy: 16, r: 2.5 },
-    { cx: 155, cy: 50, r: 2 },
-    { cx: 132, cy: 96, r: 2.8 },
-    { cx: 96, cy: 142, r: 1.8 },
-    { cx: 48, cy: 172, r: 2.2 },
-  ];
-  return (
-    <svg
-      className={styles.waveBorder}
-      viewBox="0 0 220 220"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient
-          id="waveGradOnboard"
-          x1="220"
-          y1="0"
-          x2="70"
-          y2="170"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.9" />
-          <stop offset="45%" stopColor="#7c3aed" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#5b21b6" stopOpacity="0" />
-        </linearGradient>
-        <filter id="glowOnboard">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      <path
-        d="M220 0 C183 0,147 9,128 37 C110 64,138 91,110 119 C82 147,36 143,18 174 C9 190,4 207,0 220"
-        stroke="url(#waveGradOnboard)"
-        strokeWidth="1.5"
-        fill="none"
-        filter="url(#glowOnboard)"
-        strokeLinecap="round"
-      />
-      <path
-        d="M220 0 C193 4,161 18,147 46 C133 74,156 100,136 128 C116 156,68 150,48 180 C35 197,18 212,0 220"
-        stroke="url(#waveGradOnboard)"
-        strokeWidth="0.8"
-        fill="none"
-        opacity="0.5"
-        strokeLinecap="round"
-      />
-      {dots.map((d, i) => (
-        <circle
-          key={i}
-          cx={d.cx}
-          cy={d.cy}
-          r={d.r}
-          fill="#c4b5fd"
-          className={styles.waveDot}
-          style={{
-            animationDelay: `${i * 0.25}s`,
-            animationDuration: `${1.5 + i * 0.4}s`,
-          }}
-        />
-      ))}
-    </svg>
-  );
-}
-
-// ─── Pill Toggle ──────────────────────────────────────────────
-function PillGroup({
-  options,
-  selected,
-  onToggle,
-}: {
-  options: string[];
-  selected: string[];
-  onToggle: (val: string) => void;
-}) {
-  return (
-    <div className={styles.pillsGrid}>
-      {options.map((opt) => (
-        <button
-          key={opt}
-          type="button"
-          onClick={() => onToggle(opt)}
-          className={[styles.pill, selected.includes(opt) ? styles.pillActive : ""].join(" ")}
-        >
-          {opt}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// ─── Step 1: Basic Info ───────────────────────────────────────
-function StepBasic({
-  data,
-  onChange,
-  onNext,
-}: {
-  data: OnboardingData;
-  onChange: (patch: Partial<OnboardingData>) => void;
-  onNext: () => void;
-}) {
-  return (
-    <div className={styles.stepIn}>
+    <div className="step-in">
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div>
-          <label htmlFor="ob-name" className={styles.fieldLabel}>
-            First name
-          </label>
-          <SparkleInput
-            id="ob-name"
-            placeholder="Alex"
-            value={data.name}
-            onChange={(v) => onChange({ name: v })}
-          />
+          <label htmlFor="ob-name" className="field-label">First name</label>
+          <SparkleInput id="ob-name" placeholder="Alex" value={data.name} onChange={(v) => onChange({ name: v })} />
         </div>
         <div>
-          <label htmlFor="ob-location" className={styles.fieldLabel}>
-            Location
-          </label>
-          <SparkleInput
-            id="ob-location"
-            placeholder="San Francisco, CA"
-            value={data.location}
-            onChange={(v) => onChange({ location: v })}
-          />
+          <label htmlFor="ob-location" className="field-label">Location</label>
+          <SparkleInput id="ob-location" placeholder="San Francisco, CA" value={data.location} onChange={(v) => onChange({ location: v })} />
         </div>
       </div>
 
       <div className="mb-4">
-        <label htmlFor="ob-company" className={styles.fieldLabel}>
-          Current company
-        </label>
-        <SparkleInput
-          id="ob-company"
-          placeholder="Google, Startup, Freelance…"
-          value={data.company}
-          onChange={(v) => onChange({ company: v })}
-        />
+        <label htmlFor="ob-company" className="field-label">Current company</label>
+        <SparkleInput id="ob-company" placeholder="Google, Startup, Freelance…" value={data.company} onChange={(v) => onChange({ company: v })} />
       </div>
 
       <div className="mb-7">
-        <label htmlFor="ob-portfolio" className={styles.fieldLabel}>
+        <label htmlFor="ob-portfolio" className="field-label">
           LinkedIn or portfolio URL
-          <span className={styles.fieldLabelOptional}>(optional)</span>
+          <span className="field-label-optional">(optional)</span>
         </label>
-        <SparkleInput
-          id="ob-portfolio"
-          placeholder="https://linkedin.com/in/you"
-          value={data.portfolioUrl}
-          onChange={(v) => onChange({ portfolioUrl: v })}
-        />
+        <SparkleInput id="ob-portfolio" placeholder="https://linkedin.com/in/you" value={data.portfolioUrl} onChange={(v) => onChange({ portfolioUrl: v })} />
       </div>
 
-      <button
-        onClick={onNext}
-        className={`${styles.btnPrimary} w-full cursor-pointer rounded-[11px] border-0 py-3.5 font-['Syne'] text-[15px] font-bold tracking-wide text-white`}
-      >
-        Continue →
-      </button>
+      <PrimaryButton onClick={onNext}>Continue →</PrimaryButton>
     </div>
   );
 }
 
-// ─── Step 2: Role & Experience ────────────────────────────────
-function StepRole({
-  data,
-  onChange,
-  onNext,
-  onBack,
-}: {
-  data: OnboardingData;
-  onChange: (patch: Partial<OnboardingData>) => void;
-  onNext: () => void;
-  onBack: () => void;
-}) {
+function StepRole({ data, onChange, onNext, onBack }: { data: OnboardingData; onChange: (patch: Partial<OnboardingData>) => void; onNext: () => void; onBack: () => void }) {
   return (
-    <div className={styles.stepIn}>
+    <div className="step-in">
       <div className="mb-4">
-        <label htmlFor="ob-role" className={styles.fieldLabel}>
-          Target / current role
-        </label>
-        <SparkleInput
-          id="ob-role"
-          placeholder="e.g. Senior Software Engineer"
-          value={data.targetRole}
-          onChange={(v) => onChange({ targetRole: v })}
-        />
+        <label htmlFor="ob-role" className="field-label">Target / current role</label>
+        <SparkleInput id="ob-role" placeholder="e.g. Senior Software Engineer" value={data.targetRole} onChange={(v) => onChange({ targetRole: v })} />
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div>
-          <label htmlFor="ob-exp" className={styles.fieldLabel}>
-            Experience
-          </label>
+          <label htmlFor="ob-exp" className="field-label">Experience</label>
           <select
             id="ob-exp"
             value={data.experience}
             onChange={(e) => onChange({ experience: e.target.value })}
-            className={`${styles.select} rounded-[10px] px-4 py-[13px] text-sm cursor-pointer`}
+            className="select rounded-[10px] px-4 py-[13px] text-sm cursor-pointer w-full"
           >
             <option value="">Select…</option>
-            {EXPERIENCE_LEVELS.map((l) => (
-              <option key={l} value={l}>
-                {l}
-              </option>
-            ))}
+            {EXPERIENCE_LEVELS.map((l) => (<option key={l} value={l}>{l}</option>))}
           </select>
         </div>
         <div>
-          <label htmlFor="ob-domain" className={styles.fieldLabel}>
-            Domain
-          </label>
+          <label htmlFor="ob-domain" className="field-label">Domain</label>
           <select
             id="ob-domain"
             value={data.domain}
             onChange={(e) => onChange({ domain: e.target.value })}
-            className={`${styles.select} rounded-[10px] px-4 py-[13px] text-sm cursor-pointer`}
+            className="select rounded-[10px] px-4 py-[13px] text-sm cursor-pointer w-full"
           >
             <option value="">Select…</option>
-            {DOMAINS.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
+            {DOMAINS.map((d) => (<option key={d} value={d}>{d}</option>))}
           </select>
         </div>
       </div>
 
       <div className="mb-7">
-        <label htmlFor="ob-dream" className={styles.fieldLabel}>
+        <label htmlFor="ob-dream" className="field-label">
           Dream companies
-          <span className={styles.fieldLabelOptional}>(optional)</span>
+          <span className="field-label-optional">(optional)</span>
         </label>
-        <SparkleInput
-          id="ob-dream"
-          placeholder="e.g. Meta, Stripe, any Series B startup"
-          value={data.dreamCompanies}
-          onChange={(v) => onChange({ dreamCompanies: v })}
-        />
+        <SparkleInput id="ob-dream" placeholder="e.g. Meta, Stripe, any Series B startup" value={data.dreamCompanies} onChange={(v) => onChange({ dreamCompanies: v })} />
       </div>
 
       <div className="flex gap-2.5">
-        <button
-          onClick={onBack}
-          className={`${styles.btnBack} flex-1 cursor-pointer rounded-[11px] border py-3.5 text-sm font-medium`}
-        >
-          ← Back
-        </button>
-        <button
-          onClick={onNext}
-          className={`${styles.btnPrimary} flex-[2] cursor-pointer rounded-[11px] border-0 py-3.5 font-['Syne'] text-[15px] font-bold tracking-wide text-white`}
-        >
-          Continue →
-        </button>
+        <BackButton onClick={onBack} className="flex-1" />
+        <PrimaryButton onClick={onNext} className="flex-[2]">Continue →</PrimaryButton>
       </div>
     </div>
   );
 }
 
-// ─── Step 3: Skills ───────────────────────────────────────────
-function StepSkills({
-  data,
-  onChange,
-  onNext,
-  onBack,
-}: {
-  data: OnboardingData;
-  onChange: (patch: Partial<OnboardingData>) => void;
-  onNext: () => void;
-  onBack: () => void;
-}) {
-  const toggleSkill = useCallback(
-    (skill: string) => {
-      const next = data.skills.includes(skill)
-        ? data.skills.filter((s) => s !== skill)
-        : [...data.skills, skill];
-      onChange({ skills: next });
-    },
-    [data.skills, onChange]
-  );
+function StepSkills({ data, onChange, onNext, onBack }: { data: OnboardingData; onChange: (patch: Partial<OnboardingData>) => void; onNext: () => void; onBack: () => void }) {
+  const toggleSkill = useCallback((skill: string) => {
+    const next = data.skills.includes(skill) ? data.skills.filter((s) => s !== skill) : [...data.skills, skill];
+    onChange({ skills: next });
+  }, [data.skills, onChange]);
 
   return (
-    <div className={styles.stepIn}>
+    <div className="step-in">
       <div className="mb-4">
-        <label className={styles.fieldLabel} style={{ marginBottom: 12 }}>
-          Select all that apply
-        </label>
-        <PillGroup
-          options={SKILLS}
-          selected={data.skills}
-          onToggle={toggleSkill}
-        />
+        <label className="field-label" style={{ marginBottom: 12 }}>Select all that apply</label>
+        <PillGroup options={SKILLS} selected={data.skills} onToggle={toggleSkill} />
       </div>
 
       <div className="mb-7">
-        <label htmlFor="ob-custom-skill" className={styles.fieldLabel}>
+        <label htmlFor="ob-custom-skill" className="field-label">
           Anything else?
-          <span className={styles.fieldLabelOptional}>(optional)</span>
+          <span className="field-label-optional">(optional)</span>
         </label>
-        <SparkleInput
-          id="ob-custom-skill"
-          placeholder="e.g. Rust, Kubernetes, GraphQL"
-          value={data.customSkills}
-          onChange={(v) => onChange({ customSkills: v })}
-        />
+        <SparkleInput id="ob-custom-skill" placeholder="e.g. Rust, Kubernetes, GraphQL" value={data.customSkills} onChange={(v) => onChange({ customSkills: v })} />
       </div>
 
       <div className="flex gap-2.5">
-        <button
-          onClick={onBack}
-          className={`${styles.btnBack} flex-1 cursor-pointer rounded-[11px] border py-3.5 text-sm font-medium`}
-        >
-          ← Back
-        </button>
-        <button
-          onClick={onNext}
-          className={`${styles.btnPrimary} flex-[2] cursor-pointer rounded-[11px] border-0 py-3.5 font-['Syne'] text-[15px] font-bold tracking-wide text-white`}
-        >
-          Continue →
-        </button>
+        <BackButton onClick={onBack} className="flex-1" />
+        <PrimaryButton onClick={onNext} className="flex-[2]">Continue →</PrimaryButton>
       </div>
     </div>
   );
 }
 
-// ─── Step 4: Goals ────────────────────────────────────────────
-function StepGoals({
-  data,
-  onChange,
-  onSubmit,
-  onBack,
-  loading,
-}: {
-  data: OnboardingData;
-  onChange: (patch: Partial<OnboardingData>) => void;
-  onSubmit: () => void;
-  onBack: () => void;
-  loading: boolean;
-}) {
-  const toggleType = useCallback(
-    (t: string) => {
-      const next = data.interviewTypes.includes(t)
-        ? data.interviewTypes.filter((x) => x !== t)
-        : [...data.interviewTypes, t];
-      onChange({ interviewTypes: next });
-    },
-    [data.interviewTypes, onChange]
-  );
+function StepGoals({ data, onChange, onSubmit, onBack, loading }: { data: OnboardingData; onChange: (patch: Partial<OnboardingData>) => void; onSubmit: () => void; onBack: () => void; loading: boolean }) {
+  const toggleType = useCallback((t: string) => {
+    const next = data.interviewTypes.includes(t) ? data.interviewTypes.filter((x) => x !== t) : [...data.interviewTypes, t];
+    onChange({ interviewTypes: next });
+  }, [data.interviewTypes, onChange]);
 
   return (
-    <div className={styles.stepIn}>
+    <div className="step-in">
       <div className="mb-4">
-        <label className={styles.fieldLabel} style={{ marginBottom: 12 }}>
-          Interview type
-        </label>
-        <PillGroup
-          options={INTERVIEW_TYPES}
-          selected={data.interviewTypes}
-          onToggle={toggleType}
-        />
+        <label className="field-label" style={{ marginBottom: 12 }}>Interview type</label>
+        <PillGroup options={INTERVIEW_TYPES} selected={data.interviewTypes} onToggle={toggleType} />
       </div>
 
       <div className="mb-4">
-        <label htmlFor="ob-timeline" className={styles.fieldLabel}>
-          Prep timeline
-        </label>
+        <label htmlFor="ob-timeline" className="field-label">Prep timeline</label>
         <select
           id="ob-timeline"
           value={data.prepTimeline}
           onChange={(e) => onChange({ prepTimeline: e.target.value })}
-          className={`${styles.select} rounded-[10px] px-4 py-[13px] text-sm cursor-pointer`}
+          className="select rounded-[10px] px-4 py-[13px] text-sm cursor-pointer w-full"
         >
           <option value="">How much time do you have?</option>
-          {PREP_TIMELINES.map((t) => (
-            <option key={t} value={t}>
-              {t}
-            </option>
-          ))}
+          {PREP_TIMELINES.map((t) => (<option key={t} value={t}>{t}</option>))}
         </select>
       </div>
 
       <div className="mb-7">
-        <label htmlFor="ob-extra" className={styles.fieldLabel}>
+        <label htmlFor="ob-extra" className="field-label">
           Anything else we should know?
-          <span className={styles.fieldLabelOptional}>(optional)</span>
+          <span className="field-label-optional">(optional)</span>
         </label>
-        <SparkleTextarea
-          id="ob-extra"
-          placeholder="e.g. I struggle with system design, I want to focus on behavioral rounds…"
-          value={data.extraContext}
-          onChange={(v) => onChange({ extraContext: v })}
-        />
+        <SparkleTextarea id="ob-extra" placeholder="e.g. I struggle with system design, I want to focus on behavioral rounds…" value={data.extraContext} onChange={(v) => onChange({ extraContext: v })} />
       </div>
 
       <div className="flex gap-2.5">
-        <button
-          onClick={onBack}
-          className={`${styles.btnBack} flex-1 cursor-pointer rounded-[11px] border py-3.5 text-sm font-medium`}
-        >
-          ← Back
-        </button>
-        <button
-          onClick={onSubmit}
-          disabled={loading}
-          className={`${styles.btnPrimary} flex-[2] cursor-pointer rounded-[11px] border-0 py-3.5 font-['Syne'] text-[15px] font-bold tracking-wide text-white`}
-        >
-          {loading && <span className={styles.spinner} />}
-          {loading ? "Setting up…" : "Let's go 🚀"}
-        </button>
+        <BackButton onClick={onBack} className="flex-1" />
+        <PrimaryButton onClick={onSubmit} loading={loading} loadingText="Setting up…" className="flex-[2]">
+          Let's go 🚀
+        </PrimaryButton>
       </div>
     </div>
   );
 }
 
-// ─── Step 5: Success ──────────────────────────────────────────
 function StepSuccess({ data }: { data: OnboardingData }) {
   const router = useRouter();
   return (
-    <div className={`${styles.stepIn} text-center py-4`}>
-      <div className={styles.successIcon}>✦</div>
+    <div className="step-in text-center py-4">
+      <div className="success-icon">✦</div>
       <h2 className="font-['Syne'] text-[22px] font-extrabold text-[#f5f0ff] mb-2 leading-tight">
         You&apos;re all set{data.name ? `, ${data.name}` : ""}!
       </h2>
       <p className="text-sm font-light text-purple-200/45 mb-8">
-        Your personalized interview prep is ready. Let&apos;s crush those
-        interviews.
+        Your personalized interview prep is ready. Let&apos;s crush those interviews.
       </p>
 
-      <div className={`${styles.summaryBox} text-left mb-8`}>
+      <div className="summary-box text-left mb-8">
         {data.targetRole && (
           <>
-            <p className="text-[11px] uppercase tracking-widest text-purple-200/40 mb-1">
-              Role
-            </p>
-            <p className="text-[15px] text-[#f0eaff] mb-4">
-              {data.targetRole}
-              {data.experience && ` · ${data.experience}`}
-            </p>
+            <p className="text-[11px] uppercase tracking-widest text-purple-200/40 mb-1">Role</p>
+            <p className="text-[15px] text-[#f0eaff] mb-4">{data.targetRole}{data.experience && ` · ${data.experience}`}</p>
           </>
         )}
         {data.skills.length > 0 && (
           <>
-            <p className="text-[11px] uppercase tracking-widest text-purple-200/40 mb-1">
-              Skills
-            </p>
-            <p className="text-[14px] text-[#c4b5fd]">
-              {data.skills.join(" · ")}
-            </p>
+            <p className="text-[11px] uppercase tracking-widest text-purple-200/40 mb-1">Skills</p>
+            <p className="text-[14px] text-[#c4b5fd]">{data.skills.join(" · ")}</p>
           </>
         )}
       </div>
 
-      <button
-        onClick={() => router.push("/dashboard")}
-        className={`${styles.btnPrimary} w-full cursor-pointer rounded-[11px] border-0 py-3.5 font-['Syne'] text-[15px] font-bold tracking-wide text-white`}
-      >
-        Go to Dashboard →
-      </button>
+      <PrimaryButton onClick={() => router.push("/dashboard")}>Go to Dashboard →</PrimaryButton>
     </div>
   );
 }
 
-// ─── Step meta ────────────────────────────────────────────────
-const STEP_META = [
-  {
-    label: "Step 1 of 4",
-    title: "Tell us about yourself",
-    sub: "Help us personalise your interview prep experience",
-  },
-  {
-    label: "Step 2 of 4",
-    title: "Your role & experience",
-    sub: "We'll tailor questions to your level and domain",
-  },
-  {
-    label: "Step 3 of 4",
-    title: "Your skills",
-    sub: "Pick the areas you want to be tested on",
-  },
-  {
-    label: "Step 4 of 4",
-    title: "Your goals",
-    sub: "What are you preparing for?",
-  },
-];
-
-// ─── Main Page ────────────────────────────────────────────────
+// Main Component
 export default function OnboardingPage() {
-  const [step, setStep] = useState(0); // 0–3 = form steps, 4 = success
+  const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
   const [data, setData] = useState<OnboardingData>({
-    name: "",
-    location: "",
-    company: "",
-    portfolioUrl: "",
-    targetRole: "",
-    experience: "",
-    domain: "",
-    dreamCompanies: "",
-    skills: [],
-    customSkills: "",
-    interviewTypes: [],
-    prepTimeline: "",
-    extraContext: "",
+    name: "", location: "", company: "", portfolioUrl: "", targetRole: "", experience: "", domain: "", dreamCompanies: "",
+    skills: [], customSkills: "", interviewTypes: [], prepTimeline: "", extraContext: "",
   });
 
-  const patch = useCallback((update: Partial<OnboardingData>) => {
-    setData((prev) => ({ ...prev, ...update }));
-  }, []);
-
+  const patch = useCallback((update: Partial<OnboardingData>) => setData((prev) => ({ ...prev, ...update })), []);
   const next = () => setStep((s) => s + 1);
   const back = () => setStep((s) => Math.max(0, s - 1));
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // TODO: replace with your real API call
-      // await fetch("/api/user/onboarding", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(data),
-      // });
-      await new Promise((r) => setTimeout(r, 1200)); // simulated delay
-      setStep(TOTAL_STEPS); // go to success
+      // TODO: Replace with your API call
+      await new Promise((r) => setTimeout(r, 1200));
+      setStep(TOTAL_STEPS);
     } catch (err) {
       console.error("Onboarding save failed", err);
     } finally {
@@ -813,66 +310,31 @@ export default function OnboardingPage() {
     }
   };
 
-  const progressPct =
-    step >= TOTAL_STEPS ? 100 : (step / TOTAL_STEPS) * 100;
+  const progressPct = step >= TOTAL_STEPS ? 100 : (step / TOTAL_STEPS) * 100;
 
   return (
-    <div className={styles.page}>
-      <div
-        className={`${styles.card} w-full max-w-[480px] rounded-[20px] px-11 py-12 mx-4`}
-      >
-        <div className={styles.cornerGlow} />
-        <WaveBorder />
+    <AuthCard maxWidth={480}>
+      <Logo />
 
-        {/* Brand */}
-        <Logo />
-
-        {/* Progress */}
-        <div className={styles.progressTrack}>
-          <div
-            className={styles.progressFill}
-            style={{ width: `${progressPct}%` }}
-          />
-        </div>
-
-        {/* Step header (shown for steps 0–3) */}
-        {step < TOTAL_STEPS && (
-          <>
-            <span className={`${styles.stepLabel} ${styles.fadeUp1}`}>
-              {STEP_META[step].label}
-            </span>
-            <h1
-              className={`${styles.fadeUp2} mb-2 font-['Syne'] text-[26px] font-extrabold leading-tight tracking-tight text-[#f5f0ff]`}
-            >
-              {STEP_META[step].title}
-            </h1>
-            <p className={`${styles.fadeUp3} mb-8 text-sm font-light text-purple-200/50`}>
-              {STEP_META[step].sub}
-            </p>
-          </>
-        )}
-
-        {/* Steps */}
-        {step === 0 && (
-          <StepBasic data={data} onChange={patch} onNext={next} />
-        )}
-        {step === 1 && (
-          <StepRole data={data} onChange={patch} onNext={next} onBack={back} />
-        )}
-        {step === 2 && (
-          <StepSkills data={data} onChange={patch} onNext={next} onBack={back} />
-        )}
-        {step === 3 && (
-          <StepGoals
-            data={data}
-            onChange={patch}
-            onSubmit={handleSubmit}
-            onBack={back}
-            loading={loading}
-          />
-        )}
-        {step === TOTAL_STEPS && <StepSuccess data={data} />}
+      <div className="progress-track">
+        <div className="progress-fill" style={{ width: `${progressPct}%` }} />
       </div>
-    </div>
+
+      {step < TOTAL_STEPS && (
+        <>
+          <span className="step-label fade-up-1">{STEP_META[step].label}</span>
+          <h1 className="fade-up-2 mb-2 font-['Syne'] text-[26px] font-extrabold leading-tight tracking-tight text-[#f5f0ff]">
+            {STEP_META[step].title}
+          </h1>
+          <p className="fade-up-3 mb-8 text-sm font-light text-purple-200/50">{STEP_META[step].sub}</p>
+        </>
+      )}
+
+      {step === 0 && <StepBasic data={data} onChange={patch} onNext={next} />}
+      {step === 1 && <StepRole data={data} onChange={patch} onNext={next} onBack={back} />}
+      {step === 2 && <StepSkills data={data} onChange={patch} onNext={next} onBack={back} />}
+      {step === 3 && <StepGoals data={data} onChange={patch} onSubmit={handleSubmit} onBack={back} loading={loading} />}
+      {step === TOTAL_STEPS && <StepSuccess data={data} />}
+    </AuthCard>
   );
 }
