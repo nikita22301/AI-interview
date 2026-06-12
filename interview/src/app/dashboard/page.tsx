@@ -1,14 +1,15 @@
-import ProfileCard     from '../components/ProfileCard/ProfileCard';
-import StreakCard       from '../components/StreakCard/StreakCard';
-import PerformanceCard  from '../components/PerformanceCard/PerformanceCard';
-import ChatBot          from '../components/ChatBot/ChatBot';
+import ProfileCard from '../components/ProfileCard/ProfileCard';
+import StreakCard from '../components/StreakCard/StreakCard';
+import PerformanceCard from '../components/PerformanceCard/PerformanceCard';
+import ChatBot from '../components/ChatBot/ChatBot';
+import AccountMenu from '../components/AccountMenu/AccountMenu';
 
-import userData         from '../data/user.json';
-import streakData       from '../data/streak.json';
-import performanceData  from '../data/performance.json';
-import chatbotData      from '../data/chatbot.json';
+import userData from '../data/user.json';
+import streakData from '../data/streak.json';
+import performanceData from '../data/performance.json';
+import chatbotData from '../data/chatbot.json';
 
-import styles           from './styles/dashboard.module.css';
+import styles from './styles/dashboard.module.css';
 
 export default function DashboardPage() {
   return (
@@ -16,12 +17,15 @@ export default function DashboardPage() {
       <h2 className="sr-only">
         AI Interview Dashboard — user profile, streak tracker, chatbot interviewer, and performance analytics
       </h2>
+      <div className={styles.topBar}>
+        <AccountMenu />
+      </div>
 
       <div className={styles.dashboard}>
         {/* ── LEFT SIDEBAR ── */}
         <aside className={styles.sidebar}>
           <ProfileCard user={userData} />
-          <StreakCard   streak={streakData} />
+          <StreakCard streak={streakData} />
         </aside>
 
         {/* ── TOP RIGHT: Performance ── */}

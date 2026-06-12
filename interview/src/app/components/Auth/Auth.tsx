@@ -2,19 +2,29 @@
 
 import { useState, useRef, useEffect } from "react";
 import styles from "./Authpage.module.css"
-import { Step,AuthMode, validatePass, validateConf } from "../../utils/singup"
+// import { Step,AuthMode, validatePass, validateConf } from "../../utils/singup"
+import { Step, AuthMode } from "../../utils/singup"
 import NameEmailStep from "./Singup/Nameemailstep"
 import OtpStep from "./Singup/Otpstep";
 import PasswordStep from "./Singup/Passwordstep";
 import Logo from "../CommonUI/logo"
+import { sendOtpApi, verifyOtpApi, signupApi, forgotPassword } from "../../api/signup";
+import {
+  validateInfoStep,
+  validateOtp,
+  validatePasswordStep,
+  InfoErrors,
+  PasswordErrors,
+  hasErrors,
+} from "../../utils/validation";import { useRouter } from "next/navigation";
 // ─── Step Indicator ───────────────────────────────────────────
-function StepIndicator({ step,mode }: { step: Step, mode:AuthMode }) {
+function StepIndicator({ step, mode }: { step: Step, mode: AuthMode }) {
   const steps: Step[] = ["info", "otp", "password"];
   const idx = steps.indexOf(step);
   const labels =
-  mode === "signup"
-    ? ["Your info", "Verify email", "Set password"]
-    : ["Your email", "Verify OTP", "Reset password"];
+    mode === "signup"
+      ? ["Your info", "Verify email", "Set password"]
+      : ["Your email", "Verify OTP", "Reset password"];
 
   return (
     <div className={styles.stepIndicator}>
@@ -66,30 +76,31 @@ function WaveBorder() {
 }
 
 // ─── Main Page ────────────────────────────────────────────────
-export default function AuthPage({mode}:
-    {
-        mode:AuthMode
-    }
+export default function AuthPage({ mode }:
+  {
+    mode: AuthMode
+  }
 ) {
-  const [step, setStep]       = useState<Step>("info");
+  const router = useRouter();
+  const [step, setStep] = useState<Step>("info");
   const [animKey, setAnimKey] = useState(0);
 
-  const [name, setName]   = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [err1, setErr1]   = useState({ name: "", email: "" });
+  const [err1, setErr1] = useState({ name: "", email: "" });
 
-  const [otp, setOtp]             = useState<string[]>(Array(6).fill(""));
-  const [otpErr, setOtpErr]       = useState("");
-  const [timer, setTimer]         = useState(30);
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [otpErr, setOtpErr] = useState("");
+  const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm]   = useState("");
-  const [err3, setErr3]         = useState({ password: "", confirm: "" });
+  const [confirm, setConfirm] = useState("");
+  const [err3, setErr3] = useState({ password: "", confirm: "" });
 
   const [loading, setLoading] = useState(false);
-  const [done, setDone]       = useState(false);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (step !== "otp") return;
@@ -102,33 +113,172 @@ export default function AuthPage({mode}:
 
   const goTo = (s: Step) => { setStep(s); setAnimKey((k) => k + 1); };
 
-  const handleInfo = () => {
-    // validation lives in NameEmailStep — it calls setErr1 and returns early if invalid
+  // const handleInfo = () => {
+  //   // validation lives in NameEmailStep — it calls setErr1 and returns early if invalid
+  //   setLoading(true);
+  //   setTimeout(() => { setLoading(false); goTo("otp"); }, 1200);
+  // };
+
+  // const handleOtp = () => {
+  //   if (otp.join("").length < 6) { setOtpErr("Enter all 6 digits"); return; }
+  //   setOtpErr(""); setLoading(true);
+  //   setTimeout(() => { setLoading(false); goTo("password"); }, 1200);
+  // };
+
+  // const handleResend = async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     const data = await sendOtpApi(email);
+
+  //     if (!data.success) {
+  //       alert(data.message);
+  //       return;
+  //     }
+
+  //     setOtp(Array(6).fill(""));
+  //     setOtpErr("");
+
+  //     setCanResend(false);
+  //     setTimer(30);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleResend = async () => {
+  try {
     setLoading(true);
-    setTimeout(() => { setLoading(false); goTo("otp"); }, 1200);
-  };
+    const data = await sendOtpApi(email);
+    if (!data.success) {
+      alert(data.message);
+      return;
+    }
 
-  const handleOtp = () => {
-    if (otp.join("").length < 6) { setOtpErr("Enter all 6 digits"); return; }
-    setOtpErr(""); setLoading(true);
-    setTimeout(() => { setLoading(false); goTo("password"); }, 1200);
-  };
+    setOtp(Array(6).fill(""));
+    setOtpErr("");
+    setCanResend(false);
+    setTimer(30);
 
-  const handleResend = () => {
-    setOtp(Array(6).fill("")); setOtpErr(""); setCanResend(false); setTimer(30);
+    // ✅ Interval manually restart karo
+    if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
-      setTimer((t) => { if (t <= 1) { clearInterval(timerRef.current!); setCanResend(true); return 0; } return t - 1; });
+      setTimer((t) => {
+        if (t <= 1) {
+          clearInterval(timerRef.current!);
+          setCanResend(true);
+          return 0;
+        }
+        return t - 1;
+      });
     }, 1000);
-  };
 
-  const handlePassword = () => {
-    const pe = validatePass(password), ce = validateConf(password, confirm);
-    setErr3({ password: pe, confirm: ce });
-    if (pe || ce) return;
-    setLoading(true);
-    setTimeout(() => { setLoading(false); setDone(true); }, 1500);
-  };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
+  // const handlePassword = () => {
+  //   const pe = validatePass(password), ce = validateConf(password, confirm);
+  //   setErr3({ password: pe, confirm: ce });
+  //   if (pe || ce) return;
+  //   setLoading(true);
+  //   setTimeout(() => { setLoading(false); setDone(true); }, 1500);
+  // };
+  const handleInfo = async () => {
+    const errors = validateInfoStep(name, email, mode);
 
+    setErr1(errors);
+
+    if (hasErrors(errors)) return;
+
+    try {
+      setLoading(true);
+
+      const data = await sendOtpApi(email);
+
+      if (!data.success) {
+        alert(data.message);
+        return;
+      }
+
+      goTo("otp");
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleOtp = async () => {
+    const error = validateOtp(otp);
+
+    setOtpErr(error);
+
+    if (error) return;
+
+    try {
+      setLoading(true);
+
+      const enteredOtp = otp.join("");
+
+      const data = await verifyOtpApi(email, enteredOtp);
+
+      if (!data.success) {
+        setOtpErr(data.message);
+        return;
+      }
+
+      goTo("password");
+    } catch (error) {
+      console.log(error);
+      setOtpErr("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handlePassword = async () => {
+    const errors = validatePasswordStep(password, confirm);
+    setErr3(errors);
+    if (hasErrors(errors)) return;
+
+    try {
+      setLoading(true);
+
+      let data;
+      if (mode === "signup") {
+        data = await signupApi(name, email, password);
+      } else {
+        data = await forgotPassword(email, password);
+      }
+      if (!data.success) {
+        alert(data.message);
+        return;
+      }
+
+      if (mode === "signup" && data.token) {
+        localStorage.setItem("token", data.token);
+         localStorage.setItem("email", email);
+      }
+      if (mode === "forgot-password") {
+        setDone(true);
+        setTimeout(() => {
+          router.push("/");
+        }, 2000); // 2 second baad redirect, taaki success message dikh jaye
+      } else {
+        setDone(true);
+      }
+      // setDone(true);
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
   if (done) return (
     <div className={styles.page}>
       <div className={`${styles.card} ${styles.successCard}`}>
@@ -138,17 +288,17 @@ export default function AuthPage({mode}:
             <path d="M6 16L13 23L26 9" stroke="#a78bfa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-       <h2 className={styles.successHeading}>
-  {mode === "signup"
-    ? "You're all set!"
-    : "Password Updated!"}
-</h2>
+        <h2 className={styles.successHeading}>
+          {mode === "signup"
+            ? "You're all set!"
+            : "Password Updated!"}
+        </h2>
 
-<p className={styles.successSub}>
-  {mode === "signup"
-    ? "Your account has been created. Welcome to PrepIQ."
-    : "Your password has been reset successfully."}
-</p>
+        <p className={styles.successSub}>
+          {mode === "signup"
+            ? "Your account has been created. Welcome to PrepIQ."
+            : "Your password has been reset successfully."}
+        </p>
         <a href="/" className={styles.successBtn}>Go to Sign In</a>
       </div>
     </div>
@@ -159,8 +309,8 @@ export default function AuthPage({mode}:
       <div className={styles.card}>
         <div className={styles.cornerGlow} /><WaveBorder />
 
-       <Logo />
-        <StepIndicator step={step} mode={mode}/>
+        <Logo />
+        <StepIndicator step={step} mode={mode} />
 
         {step === "info" && (
           <NameEmailStep key={`info-${animKey}`}

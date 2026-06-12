@@ -5,8 +5,19 @@ import styles from "../../public/loginpage.module.css"
 import { FaBolt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Logo from "./components/CommonUI/logo"
+import { loginUser } from "../app/api/login";
 import Loading from "./components/CommonUI/loading";
 import Link from "next/link";
+import {
+  validateInfoStep,
+  validateOtp,
+  validatePasswordStep,
+  InfoErrors,
+  PasswordErrors,
+  hasErrors,
+  validateLoginForm,
+  validateEmail,
+} from "./utils/validation";
 // ─── Types ────────────────────────────────────────────────────
 interface Sparkle {
   id: number;
@@ -71,10 +82,13 @@ function useSparkles(active: boolean, containerRef: React.RefObject<HTMLDivEleme
 
 // ─── Sparkle Input ────────────────────────────────────────────
 function SparkleInput({
-  type, placeholder, value, onChange, id,
+  type, placeholder, value, onChange, onBlur, id, error,
 }: {
   type: string; placeholder: string; value: string;
-  onChange: (v: string) => void; id: string;
+  onChange: (v: string) => void;
+  onBlur?: (v: string) => void;  // ← add
+  id: string;
+  error?: string;                // ← add
 }) {
   const [active, setActive] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -101,12 +115,16 @@ function SparkleInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setActive(true)}
-        onBlur={() => setActive(false)}
+        onBlur={(e) => {
+          setActive(false);
+          onBlur?.(e.target.value); // ← trigger validation
+        }}
         autoComplete="off"
         className={[
           styles.input,
           "rounded-[10px] px-4 py-[13px] text-sm",
           active ? styles.inputActive : "",
+          error ? styles.inputError : "",
         ].join(" ")}
       />
     </div>
@@ -165,17 +183,48 @@ function GoogleIcon() {
 
 // ─── Main Page ────────────────────────────────────────────────
 export default function LoginPage() {
-  const [email, setEmail]       = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading]   = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const handleSubmit = (e: React.MouseEvent) => {
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.preventDefault();
-    setLoading(true);
-    // TODO: call your auth API here
-    router.push("/dashboard");
-    setTimeout(() => setLoading(false), 2000);
+
+    const validationErrors = validateLoginForm(email, password);
+
+    setErrors(validationErrors);
+
+    if (hasErrors(validationErrors)) return;
+
+    try {
+      setLoading(true);
+
+      const data = await loginUser(email, password);
+
+      console.log(data);
+      localStorage.setItem("email", email);
+      localStorage.setItem("token", data.token);
+
+      router.push("/dashboard");
+    } catch (error: any) {
+      alert(
+        error.response?.data?.message ||
+        "Login failed"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+
+
 
   // if(!loading){
   //   return <Loading/>
@@ -188,7 +237,7 @@ export default function LoginPage() {
         <WaveBorder />
 
         {/* Brand */}
-        <Logo/>
+        <Logo />
 
         {/* Heading */}
         <h1 className={`${styles.fadeUp2} mb-2 font-['Syne'] text-[28px] font-extrabold leading-tight tracking-tight text-[#f5f0ff]`}>
@@ -202,11 +251,48 @@ export default function LoginPage() {
         <div className={`${styles.fadeUp4} flex flex-col gap-5 mb-3`}>
           <div>
             <label htmlFor="email" className={styles.fieldLabel}>Email</label>
-            <SparkleInput id="email" type="email" placeholder="you@example.com" value={email} onChange={setEmail} />
+            <SparkleInput
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(v) => {
+                setEmail(v);
+                // Clear error live once user starts fixing it
+                if (errors.email) setErrors((prev) => ({ ...prev, email: validateEmail(v) }));
+              }}
+              onBlur={(v) => {
+                // Validate when user leaves the field
+                setErrors((prev) => ({ ...prev, email: validateEmail(v) }));
+              }}
+              error={errors.email}
+            /> {errors.email && (
+              <p className="mt-1 text-xs text-red-400">
+                {errors.email}
+              </p>
+            )}
           </div>
           <div>
             <label htmlFor="password" className={styles.fieldLabel}>Password</label>
-            <SparkleInput id="password" type="password" placeholder="••••••••••" value={password} onChange={setPassword} />
+            <SparkleInput
+              id="password"
+              type="password"
+              placeholder="••••••••••"
+              value={password}
+              onChange={(v) => {
+                setPassword(v);
+                // Clear error once they start typing
+                if (errors.password) setErrors((prev) => ({ ...prev, password: v ? "" : "Password is required" }));
+              }}
+              onBlur={(v) => {
+                setErrors((prev) => ({ ...prev, password: v ? "" : "Password is required" }));
+              }}
+              error={errors.password}
+            />  {errors.password && (
+              <p className="mt-1 text-xs text-red-400">
+                {errors.password}
+              </p>
+            )}
           </div>
         </div>
 

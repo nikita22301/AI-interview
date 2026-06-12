@@ -2,7 +2,8 @@
 
 import { useState, useRef } from "react";
 import styles from "./style/Nameemailstep.module.css"
-import { useSparkles, validateName, validateEmail } from "../../../utils/singup"
+import { useSparkles } from "../../../utils/singup"
+import { validateName, validateEmail } from "../../../utils/validation"
 import { AuthMode } from "../../../utils/singup";
 
 interface Props {

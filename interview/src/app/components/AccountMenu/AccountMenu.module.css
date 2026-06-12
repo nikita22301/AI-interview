@@ -1,0 +1,166 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #c4b5fd;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.iconBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  min-width: 180px;
+  background: #1a1a1f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  z-index: 50;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.menuItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.menuItem.danger {
+  color: #f87171;
+}
+
+.menuItem.danger:hover {
+  background: rgba(248, 113, 113, 0.1);
+}
+
+/* Confirmation Modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.confirmBox {
+  background: #18181c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 380px;
+  width: 90%;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.confirmTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.confirmText {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.cancelBtn,
+.confirmDeleteBtn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+
+.cancelBtn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+}
+
+.cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.confirmDeleteBtn {
+  background: #ef4444;
+  color: #fff;
+}
+
+.confirmDeleteBtn:hover {
+  opacity: 0.9;
+}
+
+.confirmDeleteBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.confirmLabel {
+  font-size: 13px;
+  color: #d1d5db;
+  margin: 0 0 8px;
+}
+
+.confirmInput {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 16px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.confirmInput:focus {
+  border-color: #ef4444;
+}

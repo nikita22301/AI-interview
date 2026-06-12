@@ -2,7 +2,8 @@
 
 import { useState, useRef } from "react";
 import styles from "./style/Passwordstep.module.css"
-import { useSparkles, validatePass, validateConf } from "../../../utils/singup"
+import { useSparkles } from "../../../utils/singup";
+import { validatePassword, validateConfirmPassword } from "../../../utils/validation"
 import { AuthMode } from "../../../utils/singup";
 interface Props {
   password: string; setPassword: (v: string) => void;
@@ -11,12 +12,15 @@ interface Props {
   setErr: (e: { password: string; confirm: string }) => void;
   loading: boolean;
   onSubmit: () => void;
-  mode: AuthMode
+  mode: AuthMode;
 }
 
-function SparkleInput({ type, placeholder, value, onChange, id, error }: {
+// ── SparkleInput now accepts onBlur ──────────────────────────
+function SparkleInput({ type, placeholder, value, onChange, onBlur, id, error }: {
   type: string; placeholder: string; value: string;
-  onChange: (v: string) => void; id: string; error?: string;
+  onChange: (v: string) => void;
+  onBlur?: (v: string) => void;   // ← added
+  id: string; error?: string;
 }) {
   const [active, setActive] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,11 +35,17 @@ function SparkleInput({ type, placeholder, value, onChange, id, error }: {
           <span key={s.id} className={styles.sparkleDot}
             style={{ left: s.x, top: s.y, width: s.size, height: s.size, opacity: s.opacity }} />
         ))}
-        <input id={id} type={type} placeholder={placeholder} value={value}
+        <input
+          id={id} type={type} placeholder={placeholder} value={value}
           onChange={(e) => onChange(e.target.value)}
-          onFocus={() => setActive(true)} onBlur={() => setActive(false)}
+          onFocus={() => setActive(true)}
+          onBlur={(e) => {
+            setActive(false);
+            onBlur?.(e.target.value); // ← trigger validation on blur
+          }}
           autoComplete="off"
-          className={[styles.input, active ? styles.inputActive : "", error ? styles.inputError : ""].join(" ")} />
+          className={[styles.input, active ? styles.inputActive : "", error ? styles.inputError : ""].join(" ")}
+        />
       </div>
       {error && <p className={styles.errorMsg}><span>⚠</span> {error}</p>}
     </div>
@@ -72,7 +82,8 @@ function PasswordStrength({ password }: { password: string }) {
     <div className={styles.strengthWrap}>
       <div className={styles.strengthBar}>
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className={styles.strengthSeg} style={{ background: i < score ? color : "rgba(255,255,255,0.08)" }} />
+          <div key={i} className={styles.strengthSeg}
+            style={{ background: i < score ? color : "rgba(255,255,255,0.08)" }} />
         ))}
         <span className={styles.strengthLabel} style={{ color }}>{label}</span>
       </div>
@@ -100,10 +111,22 @@ export default function PasswordStep({ password, setPassword, confirm, setConfir
         <div className={styles.field}>
           <label htmlFor="password-su" className={styles.label}>Password</label>
           <div className={styles.inputWrap}>
-            <SparkleInput id="password-su" type={showPass ? "text" : "password"} placeholder="••••••••••"
+            <SparkleInput
+              id="password-su"
+              type={showPass ? "text" : "password"}
+              placeholder="••••••••••"
               value={password}
-              onChange={(v) => { setPassword(v); if (err.password) setErr({ ...err, password: validatePass(v) }); }}
-              error={err.password} />
+              onChange={(v) => {
+                setPassword(v);
+                // Live-clear error as user types toward valid password
+                if (err.password) setErr({ ...err, password: validatePassword(v) });
+              }}
+              onBlur={(v) => {
+                // Validate on blur (first time user leaves the field)
+                setErr({ ...err, password: validatePassword(v) });
+              }}
+              error={err.password}
+            />
             <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} className={styles.eyeBtn}>
               <EyeIcon open={showPass} />
             </button>
@@ -114,25 +137,40 @@ export default function PasswordStep({ password, setPassword, confirm, setConfir
         <div className={styles.field}>
           <label htmlFor="confirm-su" className={styles.label}>Confirm password</label>
           <div className={styles.inputWrap}>
-            <SparkleInput id="confirm-su" type={showConf ? "text" : "password"} placeholder="••••••••••"
+            <SparkleInput
+              id="confirm-su"
+              type={showConf ? "text" : "password"}
+              placeholder="••••••••••"
               value={confirm}
-              onChange={(v) => { setConfirm(v); if (err.confirm) setErr({ ...err, confirm: validateConf(password, v) }); }}
-              error={err.confirm} />
+              onChange={(v) => {
+                setConfirm(v);
+                // Live-clear confirm error as user types
+                if (err.confirm) setErr({ ...err, confirm: validateConfirmPassword(password, v) });
+              }}
+              onBlur={(v) => {
+                // Validate confirm on blur
+                setErr({ ...err, confirm: validateConfirmPassword(password, v) });
+              }}
+              error={err.confirm}
+            />
             <button type="button" tabIndex={-1} onClick={() => setShowConf((v) => !v)} className={styles.eyeBtn}>
               <EyeIcon open={showConf} />
             </button>
           </div>
         </div>
       </div>
-       {mode === "signup"?
+
+      {mode === "signup" ? (
         <button onClick={onSubmit} disabled={loading} className={styles.btn}>
           {loading && <span className={styles.spinner} />}
           {loading ? "Creating account…" : "Create Account 🎉"}
-        </button> :
+        </button>
+      ) : (
         <button onClick={onSubmit} disabled={loading} className={styles.btn}>
           {loading && <span className={styles.spinner} />}
           {loading ? "Setting password…" : "Set Password 🎉"}
-        </button>}
+        </button>
+      )}
     </div>
   );
 }

@@ -79,10 +79,19 @@ export default function OtpStep({ email, otp, setOtp, otpErr, setOtpErr, timer, 
       </button>
 
       <div className={styles.resendRow}>
-        <span className={styles.resendText}>Didn't receive it?</span>
-        {canResend
-          ? <button onClick={onResend} className={styles.resendBtn}>Resend code</button>
-          : <span className={styles.timer}>Resend in {timer}s</span>}
+          <span className={styles.resendText}>Didn't receive it?</span>
+          {canResend
+            ? <button onClick={onResend} className={styles.resendBtn}>Resend OTP</button>
+            : <span className={styles.timer}>Resend in {timer}s</span>}
+      
+      </div>
+      <div style={{textAlign:"center"}}>
+
+       {canResend && (
+  <p className={styles.expiredMsg} style={{textAlign:"center"}}>
+    ⚠️ OTP expired. Please resend.
+  </p>
+)}
       </div>
 
       <button onClick={onBack} className={styles.backBtn}>← Change email</button>

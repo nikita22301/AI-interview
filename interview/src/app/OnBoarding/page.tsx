@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./onBoarding.module.css";
 import Logo from "../components/CommonUI/logo"
+import { onBoardingApi } from "../api/onboarding";
 
 // ─── Constants ────────────────────────────────────────────────
 const DOMAINS = [
@@ -385,15 +386,22 @@ function StepBasic({
     <div className={styles.stepIn}>
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div>
-          <label htmlFor="ob-name" className={styles.fieldLabel}>
-            First name
+          <label htmlFor="ob-exp" className={styles.fieldLabel}>
+            Experience
           </label>
-          <SparkleInput
-            id="ob-name"
-            placeholder="Alex"
-            value={data.name}
-            onChange={(v) => onChange({ name: v })}
-          />
+          <select
+            id="ob-exp"
+            value={data.experience}
+            onChange={(e) => onChange({ experience: e.target.value })}
+            className={`${styles.select} rounded-[10px] px-4 py-[13px] text-sm cursor-pointer`}
+          >
+            <option value="">Select…</option>
+            {EXPERIENCE_LEVELS.map((l) => (
+              <option key={l} value={l}>
+                {l}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label htmlFor="ob-location" className={styles.fieldLabel}>
@@ -407,18 +415,18 @@ function StepBasic({
           />
         </div>
       </div>
-
-      <div className="mb-4">
-        <label htmlFor="ob-company" className={styles.fieldLabel}>
-          Current company
-        </label>
-        <SparkleInput
-          id="ob-company"
-          placeholder="Google, Startup, Freelance…"
-          value={data.company}
-          onChange={(v) => onChange({ company: v })}
-        />
-      </div>
+      {data.experience !== "Student / Intern" && (
+        <div className="mb-4">
+          <label htmlFor="ob-company" className={styles.fieldLabel}>
+            Current company
+          </label>
+          <SparkleInput
+            id="ob-company"
+            placeholder="Google, Startup, Freelance…"
+            value={data.company}
+            onChange={(v) => onChange({ company: v })}
+          />
+        </div>)}
 
       <div className="mb-7">
         <label htmlFor="ob-portfolio" className={styles.fieldLabel}>
@@ -470,24 +478,7 @@ function StepRole({
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div>
-          <label htmlFor="ob-exp" className={styles.fieldLabel}>
-            Experience
-          </label>
-          <select
-            id="ob-exp"
-            value={data.experience}
-            onChange={(e) => onChange({ experience: e.target.value })}
-            className={`${styles.select} rounded-[10px] px-4 py-[13px] text-sm cursor-pointer`}
-          >
-            <option value="">Select…</option>
-            {EXPERIENCE_LEVELS.map((l) => (
-              <option key={l} value={l}>
-                {l}
-              </option>
-            ))}
-          </select>
-        </div>
+
         <div>
           <label htmlFor="ob-domain" className={styles.fieldLabel}>
             Domain
@@ -795,24 +786,53 @@ export default function OnboardingPage() {
   const next = () => setStep((s) => s + 1);
   const back = () => setStep((s) => Math.max(0, s - 1));
 
+  // const handleSubmit = async () => {
+  //   setLoading(true);
+  //   try {
+  //     // TODO: replace with your real API call
+  //     // await fetch("/api/user/onboarding", {
+  //     //   method: "POST",
+  //     //   headers: { "Content-Type": "application/json" },
+  //     //   body: JSON.stringify(data),
+  //     // });
+  //     await new Promise((r) => setTimeout(r, 1200)); // simulated delay
+  //     setStep(TOTAL_STEPS); // go to success
+  //   } catch (err) {
+  //     console.error("Onboarding save failed", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // TODO: replace with your real API call
-      // await fetch("/api/user/onboarding", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(data),
-      // });
-      await new Promise((r) => setTimeout(r, 1200)); // simulated delay
-      setStep(TOTAL_STEPS); // go to success
+      const email = localStorage.getItem("email");
+
+      if (!email) {
+        alert("Session expired. Please login again.");
+        router.push("/");
+        return;
+      }
+
+      const result = await onBoardingApi({
+        email,
+        ...data,  // saara OnboardingData spread kar do
+      });
+
+      if (!result.success) {
+        alert(result.message);
+        return;
+      }
+
+      setStep(TOTAL_STEPS);
     } catch (err) {
-      console.error("Onboarding save failed", err);
+      console.error("Onboarding failed", err);
+      alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
   const progressPct =
     step >= TOTAL_STEPS ? 100 : (step / TOTAL_STEPS) * 100;
 
