@@ -1,7 +1,7 @@
-import ProfileCard     from '../components/ProfileCard/ProfileCard';
-import StreakCard       from '../components/StreakCard/StreakCard';
-import PerformanceCard  from '../components/PerformanceCard/PerformanceCard';
-import ChatBot          from '../components/ChatBot/ChatBot';
+import ProfileCard     from '../../../utils/components/ProfileCard/ProfileCard';
+import StreakCard       from '../../../utils/components/StreakCard/StreakCard';
+import PerformanceCard  from '../../../utils/components/PerformanceCard/PerformanceCard';
+import ChatBot          from '../../../utils/components/ChatBot/ChatBot';
 
 import userData         from '../data/user.json';
 import streakData       from '../data/streak.json';

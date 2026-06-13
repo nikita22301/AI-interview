@@ -2,8 +2,8 @@
 
 import { useState, useRef } from "react";
 import styles from "./style/Nameemailstep.module.css"
-import { useSparkles, validateName, validateEmail } from "../../../utils/singup"
-import { AuthMode } from "../../../utils/singup";
+import { useSparkles, validateName, validateEmail } from "../../../singup"
+import { AuthMode } from "../../../singup";
 
 interface Props {
   name: string; setName: (v: string) => void;

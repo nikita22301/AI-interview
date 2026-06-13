@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect } from "react";
 import { AuthCard } from "../CommonUI/FormDesign/Authcard"
 import { SparkleInput } from "../CommonUI/FormDesign/SparkleInput";
-import { PrimaryButton, BackButton } from "../../components/CommonUI/FormDesign/Buttons";
+import { PrimaryButton, BackButton } from "../CommonUI/FormDesign/Buttons";
 import Logo from "../CommonUI/logo";
 
 type Step = "info" | "otp" | "password";

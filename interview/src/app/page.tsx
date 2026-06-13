@@ -4,10 +4,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AuthCard } from "./components/CommonUI/FormDesign/Authcard";
-import { SparkleInput } from "./components/CommonUI/FormDesign/SparkleInput";
-import { PrimaryButton, GoogleButton, OrDivider } from "./components/CommonUI/FormDesign/Buttons";
-import Logo from "./components/CommonUI/logo";
+import { AuthCard } from "../../utils/components/CommonUI/FormDesign/Authcard";
+import { SparkleInput } from "../../utils/components/CommonUI/FormDesign/SparkleInput";
+import { PrimaryButton, GoogleButton, OrDivider } from "../../utils/components/CommonUI/FormDesign/Buttons";
+import Logo from "../../utils/components/CommonUI/logo";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

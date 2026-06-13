@@ -3,13 +3,13 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { AuthCard } from "../components/CommonUI/FormDesign/Authcard";
-import { SparkleInput} from "../components/CommonUI/FormDesign/SparkleInput";
-import { SparkleTextarea } from "../components/CommonUI/FormDesign/SparkleTextarea";
-import { PrimaryButton } from "../components/CommonUI/FormDesign/Buttons";
-import { BackButton } from "../components/CommonUI/FormDesign/Buttons";
-import { PillGroup } from "../components/CommonUI/FormDesign/PillGroup";
-import Logo from "../components/CommonUI/logo";
+import { AuthCard } from "../../../utils/components/CommonUI/FormDesign/Authcard";
+import { SparkleInput} from "../../../utils/components/CommonUI/FormDesign/SparkleInput";
+import { SparkleTextarea } from "../../../utils/components/CommonUI/FormDesign/SparkleTextArea";
+import { PrimaryButton } from "../../../utils/components/CommonUI/FormDesign/Buttons";
+import { BackButton } from "../../../utils/components/CommonUI/FormDesign/Buttons";
+import { PillGroup } from "../../../utils/components/CommonUI/FormDesign/PillGroup";
+import Logo from "../../../utils/components/CommonUI/logo";
 
 // Constants
 const DOMAINS = [

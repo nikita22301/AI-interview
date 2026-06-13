@@ -2,8 +2,8 @@
 
 import { useState, useRef } from "react";
 import styles from "./style/Passwordstep.module.css"
-import { useSparkles, validatePass, validateConf } from "../../../utils/singup"
-import { AuthMode } from "../../../utils/singup";
+import { useSparkles, validatePass, validateConf } from "../../../singup"
+import { AuthMode } from "../../../singup";
 interface Props {
   password: string; setPassword: (v: string) => void;
   confirm: string; setConfirm: (v: string) => void;
