@@ -213,7 +213,7 @@ export default function LoginPage() {
       localStorage.setItem("email", email);
       localStorage.setItem("token", data.token);
 
-      router.push("/dashboard");
+      router.push("/OnBoarding");
     } catch (error: any) {
       alert(
         error.response?.data?.message ||

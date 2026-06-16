@@ -16,7 +16,7 @@ import {
   InfoErrors,
   PasswordErrors,
   hasErrors,
-} from "../../utils/validation";import { useRouter } from "next/navigation";
+} from "../../utils/validation"; import { useRouter } from "next/navigation";
 // ─── Step Indicator ───────────────────────────────────────────
 function StepIndicator({ step, mode }: { step: Step, mode: AuthMode }) {
   const steps: Step[] = ["info", "otp", "password"];
@@ -149,38 +149,38 @@ export default function AuthPage({ mode }:
   // };
 
   const handleResend = async () => {
-  try {
-    setLoading(true);
-    const data = await sendOtpApi(email);
-    if (!data.success) {
-      alert(data.message);
-      return;
+    try {
+      setLoading(true);
+      const data = await sendOtpApi(email);
+      if (!data.success) {
+        alert(data.message);
+        return;
+      }
+
+      setOtp(Array(6).fill(""));
+      setOtpErr("");
+      setCanResend(false);
+      setTimer(30);
+
+      // ✅ Interval manually restart karo
+      if (timerRef.current) clearInterval(timerRef.current);
+      timerRef.current = setInterval(() => {
+        setTimer((t) => {
+          if (t <= 1) {
+            clearInterval(timerRef.current!);
+            setCanResend(true);
+            return 0;
+          }
+          return t - 1;
+        });
+      }, 1000);
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-
-    setOtp(Array(6).fill(""));
-    setOtpErr("");
-    setCanResend(false);
-    setTimer(30);
-
-    // ✅ Interval manually restart karo
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      setTimer((t) => {
-        if (t <= 1) {
-          clearInterval(timerRef.current!);
-          setCanResend(true);
-          return 0;
-        }
-        return t - 1;
-      });
-    }, 1000);
-
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   // const handlePassword = () => {
   //   const pe = validatePass(password), ce = validateConf(password, confirm);
   //   setErr3({ password: pe, confirm: ce });
@@ -261,7 +261,7 @@ export default function AuthPage({ mode }:
 
       if (mode === "signup" && data.token) {
         localStorage.setItem("token", data.token);
-         localStorage.setItem("email", email);
+        localStorage.setItem("email", email);
       }
       if (mode === "forgot-password") {
         setDone(true);
@@ -299,7 +299,16 @@ export default function AuthPage({ mode }:
             ? "Your account has been created. Welcome to PrepIQ."
             : "Your password has been reset successfully."}
         </p>
-        <a href="/" className={styles.successBtn}>Go to Sign In</a>
+        {mode === "signup" ? (
+          <button
+            onClick={() => router.push("/onboarding")}
+            className={styles.successBtn}
+          >
+            Continue to Onboarding →
+          </button>
+        ) : (
+          <a href="/" className={styles.successBtn}>Go to Sign In</a>
+        )}
       </div>
     </div>
   );

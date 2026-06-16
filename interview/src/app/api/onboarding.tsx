@@ -15,8 +15,8 @@ export const onBoardingApi = async (data: {
   prepTimeline: string;
   extraContext: string;
 }) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/onboarding`, {
-    method: "POST",
+  const res = await fetch(`${BASE_URL}/onBoarding`, {
+    method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
