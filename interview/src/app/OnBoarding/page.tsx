@@ -3,8 +3,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./onBoarding.module.css";
-import Logo from "../components/CommonUI/logo"
+import Logo from "../components/CommonUI/logo";
 import { onBoardingApi } from "../api/onboarding";
+import SparkleInput, { useSparkles } from "../components/CommonUI/SparkleInput";
+import WaveBorder from "../components/CommonUI/WaveBorder";
 
 // ─── Constants ────────────────────────────────────────────────
 const DOMAINS = [
@@ -68,17 +70,6 @@ const PREP_TIMELINES = [
 const TOTAL_STEPS = 4;
 
 // ─── Types ────────────────────────────────────────────────────
-interface Sparkle {
-  id: number;
-  x: number;
-  y: number;
-  size: number;
-  opacity: number;
-  vx: number;
-  vy: number;
-  life: number;
-}
-
 interface OnboardingData {
   // Step 1 — Basic
   name: string;
@@ -97,126 +88,6 @@ interface OnboardingData {
   interviewTypes: string[];
   prepTimeline: string;
   extraContext: string;
-}
-
-// ─── Sparkle Hook ─────────────────────────────────────────────
-function useSparkles(
-  active: boolean,
-  containerRef: React.RefObject<HTMLDivElement | null>
-) {
-  const [sparkles, setSparkles] = useState<Sparkle[]>([]);
-  const animRef = useRef<number | null>(null);
-  const idRef = useRef(0);
-
-  useEffect(() => {
-    if (!active) {
-      setSparkles([]);
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-      return;
-    }
-
-    let lastSpawn = 0;
-    const loop = (time: number) => {
-      if (time - lastSpawn > 80) {
-        lastSpawn = time;
-        const el = containerRef.current;
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          setSparkles((prev) => [
-            ...prev.slice(-18),
-            {
-              id: idRef.current++,
-              x: Math.random() * rect.width,
-              y: Math.random() * rect.height,
-              size: Math.random() * 6 + 3,
-              opacity: 1,
-              vx: (Math.random() - 0.5) * 1.5,
-              vy: -(Math.random() * 1.5 + 0.5),
-              life: 1,
-            },
-          ]);
-        }
-      }
-      setSparkles((prev) =>
-        prev
-          .map((s) => ({
-            ...s,
-            x: s.x + s.vx,
-            y: s.y + s.vy,
-            life: s.life - 0.035,
-            opacity: s.life - 0.035,
-          }))
-          .filter((s) => s.life > 0)
-      );
-      animRef.current = requestAnimationFrame(loop);
-    };
-
-    animRef.current = requestAnimationFrame(loop);
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-    };
-  }, [active, containerRef]);
-
-  return sparkles;
-}
-
-// ─── Sparkle Input ────────────────────────────────────────────
-function SparkleInput({
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-  id,
-}: {
-  type?: string;
-  placeholder: string;
-  value: string;
-  onChange: (v: string) => void;
-  id: string;
-}) {
-  const [active, setActive] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const sparkles = useSparkles(active, containerRef);
-
-  return (
-    <div
-      ref={containerRef}
-      className={styles.sparkleWrapper}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => {
-        if (document.activeElement?.id !== id) setActive(false);
-      }}
-    >
-      {sparkles.map((s) => (
-        <span
-          key={s.id}
-          className={styles.sparkleDot}
-          style={{
-            left: s.x,
-            top: s.y,
-            width: s.size,
-            height: s.size,
-            opacity: s.opacity,
-          }}
-        />
-      ))}
-      <input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setActive(true)}
-        onBlur={() => setActive(false)}
-        autoComplete="off"
-        className={[
-          styles.input,
-          "rounded-[10px] px-4 py-[13px] text-sm",
-          active ? styles.inputActive : "",
-        ].join(" ")}
-      />
-    </div>
-  );
 }
 
 // ─── Sparkle Textarea ─────────────────────────────────────────
@@ -275,76 +146,6 @@ function SparkleTextarea({
   );
 }
 
-// ─── Wave SVG ─────────────────────────────────────────────────
-function WaveBorder() {
-  const dots = [
-    { cx: 200, cy: 16, r: 2.5 },
-    { cx: 155, cy: 50, r: 2 },
-    { cx: 132, cy: 96, r: 2.8 },
-    { cx: 96, cy: 142, r: 1.8 },
-    { cx: 48, cy: 172, r: 2.2 },
-  ];
-  return (
-    <svg
-      className={styles.waveBorder}
-      viewBox="0 0 220 220"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient
-          id="waveGradOnboard"
-          x1="220"
-          y1="0"
-          x2="70"
-          y2="170"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.9" />
-          <stop offset="45%" stopColor="#7c3aed" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#5b21b6" stopOpacity="0" />
-        </linearGradient>
-        <filter id="glowOnboard">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      <path
-        d="M220 0 C183 0,147 9,128 37 C110 64,138 91,110 119 C82 147,36 143,18 174 C9 190,4 207,0 220"
-        stroke="url(#waveGradOnboard)"
-        strokeWidth="1.5"
-        fill="none"
-        filter="url(#glowOnboard)"
-        strokeLinecap="round"
-      />
-      <path
-        d="M220 0 C193 4,161 18,147 46 C133 74,156 100,136 128 C116 156,68 150,48 180 C35 197,18 212,0 220"
-        stroke="url(#waveGradOnboard)"
-        strokeWidth="0.8"
-        fill="none"
-        opacity="0.5"
-        strokeLinecap="round"
-      />
-      {dots.map((d, i) => (
-        <circle
-          key={i}
-          cx={d.cx}
-          cy={d.cy}
-          r={d.r}
-          fill="#c4b5fd"
-          className={styles.waveDot}
-          style={{
-            animationDelay: `${i * 0.25}s`,
-            animationDuration: `${1.5 + i * 0.4}s`,
-          }}
-        />
-      ))}
-    </svg>
-  );
-}
 
 // ─── Pill Toggle ──────────────────────────────────────────────
 function PillGroup({

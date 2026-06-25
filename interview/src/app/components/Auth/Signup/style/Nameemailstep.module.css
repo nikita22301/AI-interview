@@ -25,9 +25,10 @@
   margin-bottom: 28px;
 }
 
-.emailHighlight {
-  font-weight: 500;
-  color: #a78bfa;
+.fieldsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .field {
@@ -43,52 +44,6 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: rgba(167, 139, 250, 0.7);
-}
-
-/* ── OTP Grid ── */
-.otpGrid {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.otpBox {
-  width: 44px;
-  height: 48px;
-  flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 10px;
-  font-family: 'Syne', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
-  color: #f0eaff;
-  caret-color: #a78bfa;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s;
-}
-
-.otpBox:focus {
-  border-color: rgba(139, 92, 246, 0.7);
-  background: rgba(124, 58, 237, 0.1);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2), 0 0 16px rgba(124, 58, 237, 0.15);
-  transform: scale(1.06);
-}
-
-.otpFilled {
-  border-color: rgba(167, 139, 250, 0.5);
-  background: rgba(124, 58, 237, 0.08);
-  color: #c4b5fd;
-}
-
-.errorMsg {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: #f87171;
 }
 
 /* ── Button ── */
@@ -121,7 +76,7 @@
 
 .btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.55);
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.55), 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .btn:disabled { opacity: 0.7; cursor: not-allowed; }
@@ -139,42 +94,19 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Resend row ── */
-.resendRow {
-  margin-top: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+/* ── Footer ── */
+.footer {
+  margin-top: 24px;
+  text-align: center;
   font-size: 13px;
+  color: rgba(200, 185, 255, 0.4);
 }
 
-.resendText { color: rgba(200, 185, 255, 0.4); }
-
-.resendBtn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
+.link {
   font-weight: 500;
   color: #a78bfa;
+  text-decoration: none;
   transition: color 0.2s;
 }
 
-.resendBtn:hover { color: #c4b5fd; }
-
-.timer { color: rgba(167, 139, 250, 0.45); font-variant-numeric: tabular-nums; }
-
-.backBtn {
-  margin-top: 12px;
-  width: 100%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px 0;
-  font-size: 13px;
-  color: rgba(167, 139, 250, 0.5);
-  transition: color 0.2s;
-}
-
-.backBtn:hover { color: #a78bfa; }
+.link:hover { color: #c4b5fd; }
